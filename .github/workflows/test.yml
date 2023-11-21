@@ -1,14 +1,15 @@
-name: Node.js CI
+name: "🔧 test"
 
 on: [push]
 
 jobs:
   test:
+    name: "🔧 test"
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v4
-      - name: Use Node.js
+      - name: 📚 checkout
+        uses: actions/checkout@v4
+      - name: 🟢 node
         uses: actions/setup-node@v3
         with:
           node-version: "18.x"
