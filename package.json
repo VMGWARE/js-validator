@@ -1,0 +1,19 @@
+{
+  "name": "@vmgware/js-validator",
+  "version": "0.9.0",
+  "description": "A versatile and easy-to-use JavaScript validation library for ensuring data integrity with extensive customization options.",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VMGWARE/js-validator.git"
+  },
+  "author": "VMG Ware",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/VMGWARE/js-validator/issues"
+  },
+  "homepage": "https://github.com/VMGWARE/js-validator#readme"
+}
