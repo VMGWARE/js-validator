@@ -1,3 +1,5 @@
+// file deepcode ignore NoHardcodedPasswords/test: Not a real password
+
 const Validator = require("../src/validator");
 
 describe("Validator - Type", () => {

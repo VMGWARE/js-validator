@@ -225,7 +225,7 @@ class Validator {
    * @returns {boolean} - Returns true if the value is a valid date, otherwise false.
    */
   #isDate(value) {
-    return value instanceof Date && !isNaN(value);
+    return value instanceof Date && !Number.isNaN(value);
   }
 
   /**
