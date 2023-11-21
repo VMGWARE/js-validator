@@ -173,7 +173,26 @@ describe("Validator - match Validation", () => {
   });
 });
 
-// TODO: Special Validation: email, etc.
+describe("Validator - Email Validation", () => {
+  it("should validate fields against an email", () => {
+    const rules = {
+      email: { type: "string", required: true, validate: "email" },
+    };
+    const messages = {
+      email: {
+        type: "Email must be a string",
+        required: "Email is required",
+        validate: "Email must be a valid email",
+      },
+    };
+    const validator = new Validator(rules, messages);
+
+    expect(validator.validate({ email: "john@doe.com" })).resolves.toBe(true);
+    expect(validator.validate({ email: "john@doe" })).resolves.toBe(false);
+    expect(validator.validate({ email: "john" })).resolves.toBe(false);
+    expect(validator.validate({ email: "john@doe." })).resolves.toBe(false);
+  });
+});
 
 describe("Validator - Custom Validation", () => {
   it("should validate fields against a custom function", () => {
