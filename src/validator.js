@@ -324,6 +324,9 @@ class Validator {
         isValid = false;
       }
 
+      // TODO: min/max should work for both strings and numbers, for strings it should be based on length, for numbers it should be based on value
+      // As having both min/max and minLength/maxLength is redundant, we should probably remove minLength/maxLength and only keep min/max
+
       // Check for maximum length
       if (rule.maxLength !== undefined && value.length > rule.maxLength) {
         this.errors[key] = this.messages[key].maxLength || "Too long";
