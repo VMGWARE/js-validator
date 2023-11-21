@@ -244,7 +244,7 @@ class Validator {
 
       // Check for required field
       if (rule.required && (value === "" || value === undefined)) {
-        this.errors[key] = this.messages[key].required;
+        this.errors[key] = this.messages[key].required || "Field is required";
         isValid = false;
         continue; // Skip further checks if the field is missing
       }
@@ -285,31 +285,31 @@ class Validator {
 
       // Check for minimum length
       if (rule.min !== undefined && value.length < rule.min) {
-        this.errors[key] = this.messages[key].min;
+        this.errors[key] = this.messages[key].min || "Too short";
         isValid = false;
       }
 
       // Check for maximum length
       if (rule.max !== undefined && value.length > rule.max) {
-        this.errors[key] = this.messages[key].max;
+        this.errors[key] = this.messages[key].max || "Too long";
         isValid = false;
       }
 
       // Check for valid email
       if (rule.validate === "email" && !this.#validateEmail(value)) {
-        this.errors[key] = this.messages[key].validate;
+        this.errors[key] = this.messages[key].validate || "Invalid email";
         isValid = false;
       }
 
       // Check for matching fields
       if (rule.match && value !== input[rule.match]) {
-        this.errors[key] = this.messages[key].match;
+        this.errors[key] = this.messages[key].match || "Fields do not match";
         isValid = false;
       }
 
       // Check for regex
       if (rule.regex && !this.#validateRegex(value, rule.regex)) {
-        this.errors[key] = this.messages[key].regex;
+        this.errors[key] = this.messages[key].regex || "Invalid value";
         isValid = false;
       }
 
