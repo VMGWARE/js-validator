@@ -10,9 +10,9 @@ jobs:
       - name: 📚 checkout
         uses: actions/checkout@v2.1.1
       - name: 🟢 node
-        uses: actions/setup-node@v1.4.2
+        uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: "18.x"
           registry-url: https://registry.npmjs.org
       - name: 🚀 publish
         run: npm publish --access public
