@@ -389,6 +389,33 @@ class Validator {
     this.errors = {};
     this.passed = {};
   }
+
+  /**
+   * Update the validation rules.
+   * @param {Object} newRules - The new rules to update.
+   */
+  updateRules(newRules) {
+    this.#validateRulesFormat(newRules);
+    this.rules = { ...this.rules, ...newRules };
+  }
+
+  /**
+   * Update the validation messages.
+   * @param {Object} newMessages - The new messages to update.
+   */
+  updateMessages(newMessages) {
+    this.#validateMessagesFormat(newMessages);
+    this.messages = { ...this.messages, ...newMessages };
+  }
+
+  /**
+   * Update the validation options.
+   * @param {Object} newOptions - The new options to update.
+   */
+  updateOptions(newOptions) {
+    this.#validateOptionsFormat(newOptions);
+    this.options = { ...this.options, ...newOptions };
+  }
 }
 
 module.exports = Validator;
