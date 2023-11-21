@@ -242,6 +242,11 @@ class Validator {
       const rule = this.rules[key];
       const value = input[key];
 
+      // Skipping validation under certain conditions
+      if (rule.skip && typeof rule.skip === "function" && rule.skip(input)) {
+        continue; // Skip further validation if the condition is met
+      }
+
       // Check for required field
       if (rule.required && (value === "" || value === undefined)) {
         this.errors[key] = this.messages[key].required || "Field is required";
