@@ -321,3 +321,123 @@ describe("Validator - Options", () => {
     expect(validator.errors).toEqual({ age: "Field is not allowed" });
   });
 });
+
+describe("Validator - Functions", () => {
+  it("Should get errors", () => {
+    const rules = {
+      name: { type: "string", required: true },
+    };
+    const messages = {
+      name: {
+        type: "Name must be a string",
+        required: "Name is required",
+      },
+    };
+    const validator = new Validator(rules, messages);
+    validator.validate({});
+
+    expect(validator.getErrors()).toEqual({
+      name: "Name is required",
+    });
+  });
+
+  it("Should get passed fields", () => {
+    const rules = {
+      name: { type: "string", required: true },
+    };
+    const messages = {
+      name: {
+        type: "Name must be a string",
+        required: "Name is required",
+      },
+    };
+    const validator = new Validator(rules, messages, {
+      trackPassedFields: true,
+    });
+    validator.validate({ name: "John Doe" });
+
+    expect(validator.getPassedFields()).toEqual({
+      name: "John Doe",
+    });
+  });
+
+  it("Should reset the validator", () => {
+    const rules = {
+      name: { type: "string", required: true },
+    };
+    const messages = {
+      name: {
+        type: "Name must be a string",
+        required: "Name is required",
+      },
+    };
+    const validator = new Validator(rules, messages, {
+      trackPassedFields: true,
+    });
+    validator.validate({ name: "John Doe" });
+    validator.reset();
+
+    expect(validator.getPassedFields()).toEqual({});
+    expect(validator.getErrors()).toEqual({});
+  });
+
+  it("Should update the rules", () => {
+    const rules = {
+      name: { type: "string", required: true },
+    };
+    const messages = {
+      name: {
+        type: "Name must be a string",
+        required: "Name is required",
+      },
+    };
+    const validator = new Validator(rules, messages);
+    validator.updateRules({ name: { type: "string", required: false } });
+    validator.validate({});
+
+    expect(validator.getErrors()).toEqual({});
+  });
+
+  it("Should update the messages", () => {
+    const rules = {
+      name: { type: "string", required: true },
+    };
+    const messages = {
+      name: {
+        type: "Name must be a string",
+        required: "Name is required",
+      },
+    };
+    const validator = new Validator(rules, messages);
+    validator.updateMessages({
+      name: {
+        type: "Name must be a string",
+        required: "Name is not required",
+      },
+    });
+    validator.validate({});
+
+    expect(validator.getErrors()).toEqual({
+      name: "Name is not required",
+    });
+  });
+
+  it("Should update the options", () => {
+    const rules = {
+      name: { type: "string", required: true },
+    };
+    const messages = {
+      name: {
+        type: "Name must be a string",
+        required: "Name is required",
+      },
+    };
+    const validator = new Validator(rules, messages, {
+      trackPassedFields: true,
+    });
+    validator.updateOptions({ trackPassedFields: false });
+    validator.validate({ name: "John Doe" });
+
+    expect(validator.getPassedFields()).toEqual({});
+  });
+});
