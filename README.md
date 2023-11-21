@@ -10,7 +10,7 @@ A versatile and easy-to-use JavaScript validation library, JS Validator ensures 
 - Easy error message customization.
 - Options for strict mode validation.
 - Methods for retrieving passed fields and current errors.
-- Fully documented and TypeScript friendly.
+- Fully documented.
 
 ## Installation
 
