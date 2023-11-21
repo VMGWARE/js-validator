@@ -237,3 +237,48 @@ describe("Validator - Regex Validation", () => {
     expect(validator.validate({ username: "John Doe!" })).resolves.toBe(false);
   });
 });
+
+describe("Validator - Options", () => {
+  it("Should track the passed fields", () => {
+    const rules = {
+      name: { type: "string", required: true },
+      age: { type: "number", required: true },
+    };
+    const messages = {
+      name: {
+        type: "Name must be a string",
+        required: "Name is required",
+      },
+      age: {
+        type: "Age must be a number",
+        required: "Age is required",
+      },
+    };
+    const options = { trackPassedFields: true };
+
+    const validator = new Validator(rules, messages, options);
+    validator.validate({ name: "John Doe", age: 20 });
+
+    // Contains { name: "John Doe", age: 20}
+    expect(validator.passed).toEqual({ name: "John Doe", age: 20 });
+  });
+
+  it("Should give error for fields not in rules", () => {
+    const rules = {
+      name: { type: "string", required: true },
+    };
+    const messages = {
+      name: {
+        type: "Name must be a string",
+        required: "Name is required",
+      },
+    };
+    const options = { trackPassedFields: true, strictMode: true };
+
+    const validator = new Validator(rules, messages, options);
+    validator.validate({ name: "John Doe", age: 20 });
+
+    // Contains { name: "John Doe", age: 20}
+    expect(validator.errors).toEqual({ age: "Field is not allowed" });
+  });
+});

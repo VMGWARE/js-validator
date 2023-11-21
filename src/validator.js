@@ -28,7 +28,7 @@
 
 /**
  * @typedef {Object} Options
- * @property {boolean} [trackPassed] - Whether to track fields that passed validation.
+ * @property {boolean} [trackPassedFields] - Whether to track fields that passed validation.
  * @property {boolean} [strictMode] - Flag to enable strict mode. If true, fields not defined in rules will be flagged as errors.
  */
 
@@ -126,11 +126,11 @@ class Validator {
       throw new Error("The options should be an object.");
     }
     if (
-      options.trackPassed !== undefined &&
-      typeof options.trackPassed !== "boolean"
+      options.trackPassedFields !== undefined &&
+      typeof options.trackPassedFields !== "boolean"
     ) {
       throw new Error(
-        `The 'trackPassed' property for options must be of type boolean.`
+        `The 'trackPassedFields' property for options must be of type boolean.`
       );
     }
   }
@@ -369,17 +369,21 @@ class Validator {
           isValid = false;
         }
       }
+    }
 
-      // Strict mode check
-      if (this.options.strictMode && !(key in input)) {
-        this.errors[key] = "Field is not allowed";
-        isValid = false;
+    // If strict mode is enabled, check for fields that are not defined in rules
+    if (this.options.strictMode) {
+      for (const key in input) {
+        if (!this.rules[key]) {
+          this.errors[key] = "Field is not allowed";
+          isValid = false;
+        }
       }
     }
 
     // Iterate over the fields after validation checks
     for (const key in this.rules) {
-      if (!this.errors[key] && this.options.trackPassed) {
+      if (!this.errors[key] && this.options.trackPassedFields) {
         this.passed[key] = input[key];
       }
     }
