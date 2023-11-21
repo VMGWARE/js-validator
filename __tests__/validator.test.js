@@ -104,30 +104,10 @@ describe("Validator - Required Validation", () => {
   });
 });
 
-describe("Validator - Length Validation", () => {
-  it("should validate length fields", () => {
-    const rules = {
-      name: { type: "string", required: true, minLength: 5, maxLength: 10 },
-    };
-    const messages = {
-      name: {
-        type: "Name must be a string",
-        required: "Name is required",
-        minLength: "Name must be at least 5 characters",
-        maxLength: "Name must be at most 10 characters",
-      },
-    };
-    const validator = new Validator(rules, messages);
-
-    expect(validator.validate({ name: "John Doe" })).resolves.toBe(true);
-    expect(validator.validate({ name: "John" })).resolves.toBe(false);
-  });
-});
-
 describe("Validator - Min/Max Validation", () => {
-  it("should validate min/max fields", () => {
+  it("should validate number fields against a minimum value", () => {
     const rules = {
-      age: { type: "number", required: true, min: 18, max: 60 },
+      age: { type: "number", required: true, min: 18 },
     };
     const messages = {
       age: {
@@ -141,7 +121,64 @@ describe("Validator - Min/Max Validation", () => {
 
     expect(validator.validate({ age: 20 })).resolves.toBe(true);
     expect(validator.validate({ age: 17 })).resolves.toBe(false);
+  });
+
+  it("should validate number fields against a maximum value", () => {
+    const rules = {
+      age: { type: "number", required: true, max: 60 },
+    };
+    const messages = {
+      age: {
+        type: "Age must be a number",
+        required: "Age is required",
+        min: "Age must be greater than or equal to 18",
+        max: "Age must be less than or equal to 60",
+      },
+    };
+    const validator = new Validator(rules, messages);
+
+    expect(validator.validate({ age: 20 })).resolves.toBe(true);
     expect(validator.validate({ age: 61 })).resolves.toBe(false);
+  });
+
+  it("should validate string fields against a minimum length", () => {
+    const rules = {
+      name: { type: "string", required: true, min: 3 },
+    };
+    const messages = {
+      name: {
+        type: "Name must be a string",
+        required: "Name is required",
+        min: "Name must be at least 3 characters",
+        max: "Name must be at most 60 characters",
+      },
+    };
+    const validator = new Validator(rules, messages);
+
+    expect(validator.validate({ name: "John Doe" })).resolves.toBe(true);
+    expect(validator.validate({ name: "Jo" })).resolves.toBe(false);
+  });
+
+  it("should validate string fields against a maximum length", () => {
+    const rules = {
+      name: { type: "string", required: true, max: 60 },
+    };
+    const messages = {
+      name: {
+        type: "Name must be a string",
+        required: "Name is required",
+        min: "Name must be at least 3 characters",
+        max: "Name must be at most 60 characters",
+      },
+    };
+    const validator = new Validator(rules, messages);
+
+    expect(validator.validate({ name: "John Doe" })).resolves.toBe(true);
+    expect(
+      validator.validate({
+        name: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec",
+      })
+    ).resolves.toBe(false);
   });
 });
 

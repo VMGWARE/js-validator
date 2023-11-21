@@ -2,10 +2,8 @@
  * @typedef {Object} Rule
  * @property {'string' | 'number' | 'boolean' | 'integer' | 'float' | 'date'} type - The data type of the field.
  * @property {boolean} [required] - Whether the field is required.
- * @property {number} [minLength] - Minimum length.
- * @property {number} [maxLength] - Maximum length.
- * @property {number} [min] - Minimum value.
- * @property {number} [max] - Maximum value.
+ * @property {number} [min] - Minimum value/length.
+ * @property {number} [max] - Maximum value/length.
  * @property {string} [match] - Field must match the value of this field.
  * @property {string} [validate] - Special validation ('email', etc.).
  * @property {Function} [custom] - Custom validation function. Should return true if valid.
@@ -16,10 +14,8 @@
  * @typedef {Object} Message
  * @property {string} type - The error message for incorrect type.
  * @property {string} [required] - The error message for missing required field.
- * @property {string} [minLength] - The error message for value below minimum length.
- * @property {string} [maxLength] - The error message for value above maximum length.
- * @property {string} [min] - The error message for value below minimum.
- * @property {string} [max] - The error message for value above maximum.
+ * @property {string} [min] - The error message for value/length below minimum.
+ * @property {string} [max] - The error message for value/length above maximum.
  * @property {string} [match] - The error message for non-matching fields.
  * @property {string} [validate] - The error message for invalid email.
  * @property {string} [custom] - The error message for custom validation failure.
@@ -72,16 +68,6 @@ class Validator {
       if (rule.required !== undefined && typeof rule.required !== "boolean") {
         throw new Error(
           `The 'required' property for '${key}' must be of type boolean.`
-        );
-      }
-      if (rule.minLength !== undefined && typeof rule.minLength !== "number") {
-        throw new Error(
-          `The 'minLength' property for '${key}' must be of type number.`
-        );
-      }
-      if (rule.maxLength !== undefined && typeof rule.maxLength !== "number") {
-        throw new Error(
-          `The 'maxLength' property for '${key}' must be of type number.`
         );
       }
       if (rule.min !== undefined && typeof rule.min !== "number") {
@@ -156,22 +142,6 @@ class Validator {
       ) {
         throw new Error(
           `The 'required' property for '${key}' must be of type string.`
-        );
-      }
-      if (
-        message.minLength !== undefined &&
-        typeof message.minLength !== "string"
-      ) {
-        throw new Error(
-          `The 'minLength' property for '${key}' must be of type string.`
-        );
-      }
-      if (
-        message.maxLength !== undefined &&
-        typeof message.maxLength !== "string"
-      ) {
-        throw new Error(
-          `The 'maxLength' property for '${key}' must be of type string.`
         );
       }
       if (message.min !== undefined && typeof message.min !== "string") {
@@ -318,31 +288,32 @@ class Validator {
         isValid = false;
       }
 
-      // Check for minimum length
-      if (rule.minLength !== undefined && value.length < rule.minLength) {
-        this.errors[key] = this.messages[key].minLength || "Too short";
-        isValid = false;
-      }
-
-      // TODO: min/max should work for both strings and numbers, for strings it should be based on length, for numbers it should be based on value
-      // As having both min/max and minLength/maxLength is redundant, we should probably remove minLength/maxLength and only keep min/max
-
-      // Check for maximum length
-      if (rule.maxLength !== undefined && value.length > rule.maxLength) {
-        this.errors[key] = this.messages[key].maxLength || "Too long";
-        isValid = false;
-      }
-
       // Check for minimum value
-      if (rule.min !== undefined && value < rule.min) {
-        this.errors[key] = this.messages[key].min || "Too short";
-        isValid = false;
+      if (rule.min !== undefined) {
+        // If the value is a string, check the length
+        if (typeof value === "string" && value.length < rule.min) {
+          this.errors[key] = this.messages[key].min || "Too short";
+          isValid = false;
+        }
+        // If the value is a number, check the value
+        if (typeof value === "number" && value < rule.min) {
+          this.errors[key] = this.messages[key].min || "Too short";
+          isValid = false;
+        }
       }
 
       // Check for maximum value
-      if (rule.max !== undefined && value > rule.max) {
-        this.errors[key] = this.messages[key].max || "Too long";
-        isValid = false;
+      if (rule.max !== undefined) {
+        // If the value is a string, check the length
+        if (typeof value === "string" && value.length > rule.max) {
+          this.errors[key] = this.messages[key].max || "Too long";
+          isValid = false;
+        }
+        // If the value is a number, check the value
+        if (typeof value === "number" && value > rule.max) {
+          this.errors[key] = this.messages[key].max || "Too long";
+          isValid = false;
+        }
       }
 
       // Check for valid email
