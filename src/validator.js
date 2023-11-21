@@ -183,7 +183,7 @@ class Validator {
   /**
    * Validates an email address with a regular expression.
    * @param {string} email - The email address to validate.
-   * @returns {boolean} - Returns true if the email is valid, otherwise false.
+   * @returns {boolean} Returns true if the email is valid, otherwise false.
    */
   #validateEmail(email) {
     const re =
@@ -195,7 +195,7 @@ class Validator {
    * Validates a value with a regular expression.
    * @param {string} value - The value to validate.
    * @param {RegExp} regex - The regular expression to use.
-   * @returns {boolean} - Returns true if the regex is valid, otherwise false.
+   * @returns {boolean} Returns true if the regex is valid, otherwise false.
    */
   #validateRegex(value, regex) {
     return regex.test(value);
@@ -204,7 +204,7 @@ class Validator {
   /**
    * Validates if a value is an integer.
    * @param {any} value - The value to validate.
-   * @returns {boolean} - Returns true if the value is an integer, otherwise false.
+   * @returns {boolean} Returns true if the value is an integer, otherwise false.
    */
   #isInteger(value) {
     return Number.isInteger(value);
@@ -213,7 +213,7 @@ class Validator {
   /**
    * Validates if a value is a float.
    * @param {any} value - The value to validate.
-   * @returns {boolean} - Returns true if the value is a float, otherwise false.
+   * @returns {boolean} Returns true if the value is a float, otherwise false.
    */
   #isFloat(value) {
     return typeof value === "number" && !Number.isInteger(value);
@@ -222,7 +222,7 @@ class Validator {
   /**
    * Validates if a value is a valid date.
    * @param {any} value - The value to validate.
-   * @returns {boolean} - Returns true if the value is a valid date, otherwise false.
+   * @returns {boolean} Returns true if the value is a valid date, otherwise false.
    */
   #isDate(value) {
     return value instanceof Date && !Number.isNaN(value);
@@ -231,7 +231,7 @@ class Validator {
   /**
    * Validates the provided input against the predefined rules and sets error messages accordingly.
    * @param {Object} input - The input object with keys and values to validate.
-   * @returns {Promise<boolean>} - Returns true if no validation errors, false otherwise. Asynchronous to support async custom validations.
+   * @returns {Promise<boolean>} Returns true if no validation errors, false otherwise. Asynchronous to support async custom validations.
    */
   async validate(input) {
     this.errors = {};
