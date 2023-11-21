@@ -313,9 +313,9 @@ class Validator {
         isValid = false;
       }
 
-      // Custom validation
+      // Asynchronous custom validation
       if (rule.custom && typeof rule.custom === "function") {
-        const customValid = await Promise.resolve(rule.custom(value));
+        const customValid = await rule.custom(value);
         if (!customValid) {
           this.errors[key] =
             this.messages[key].custom || "Custom validation failed";
