@@ -7,6 +7,7 @@
  * @property {string} [match] - Field must match the value of this field.
  * @property {string} [validate] - Special validation ('email', etc.).
  * @property {Function} [custom] - Custom validation function. Should return true if valid.
+ * @property {RegExp} [regex] - Regular expression to validate the field.
  */
 
 /**
@@ -18,6 +19,7 @@
  * @property {string} [match] - The error message for non-matching fields.
  * @property {string} [validate] - The error message for invalid email.
  * @property {string} [custom] - The error message for custom validation failure.
+ * @property {string} [regex] - The error message for regex validation failure.
  */
 
 /**
@@ -88,6 +90,16 @@ class Validator {
           `The 'validate' property for '${key}' must be of type string.`
         );
       }
+      if (rule.custom !== undefined && typeof rule.custom !== "function") {
+        throw new Error(
+          `The 'custom' property for '${key}' must be of type function.`
+        );
+      }
+      if (rule.regex !== undefined && !(rule.regex instanceof RegExp)) {
+        throw new Error(
+          `The 'regex' property for '${key}' must be of type RegExp.`
+        );
+      }
     }
   }
 
@@ -155,6 +167,16 @@ class Validator {
           `The 'validate' property for '${key}' must be of type string.`
         );
       }
+      if (message.custom !== undefined && typeof message.custom !== "string") {
+        throw new Error(
+          `The 'custom' property for '${key}' must be of type string.`
+        );
+      }
+      if (message.regex !== undefined && typeof message.regex !== "string") {
+        throw new Error(
+          `The 'regex' property for '${key}' must be of type string.`
+        );
+      }
     }
   }
 
@@ -167,6 +189,16 @@ class Validator {
     const re =
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
+  }
+
+  /**
+   * Validates a value with a regular expression.
+   * @param {string} value - The value to validate.
+   * @param {RegExp} regex - The regular expression to use.
+   * @returns {boolean} - Returns true if the regex is valid, otherwise false.
+   */
+  #validateRegex(value, regex) {
+    return regex.test(value);
   }
 
   /**
@@ -220,6 +252,12 @@ class Validator {
       // Check for matching fields
       if (rule.match && value !== input[rule.match]) {
         this.errors[key] = this.messages[key].match;
+        isValid = false;
+      }
+
+      // Check for regex
+      if (rule.regex && !this.#validateRegex(value, rule.regex)) {
+        this.errors[key] = this.messages[key].regex;
         isValid = false;
       }
 
