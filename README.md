@@ -31,8 +31,8 @@ const rules = {
 };
 
 const messages = {
-  email: { required: 'Email is required', validate: 'Invalid email' },
-  age: { min: 'Age must be at least 18' },
+  email: { type: 'Email must be a string', required: 'Email is required', validate: 'Invalid email' },
+  age: { type: 'Age must be a number', min: 'Age must be at least 18' },
 };
 
 const validator = new Validator(rules, messages);
