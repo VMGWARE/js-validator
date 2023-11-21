@@ -234,6 +234,11 @@ class Validator {
    * @returns {Promise<boolean>} Returns true if no validation errors, false otherwise. Asynchronous to support async custom validations.
    */
   async validate(input) {
+    // Ensure input is an object
+    if (typeof input !== "object" || Array.isArray(input)) {
+      throw new Error("Input must be an object.");
+    }
+
     this.errors = {};
     let isValid = true;
 
