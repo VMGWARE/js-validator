@@ -15,7 +15,7 @@ A versatile and easy-to-use JavaScript validation library, JS Validator ensures 
 ## Installation
 
 ```bash
-npm install [your-package-name]
+npm install @vmgware/js-validator
 ```
 
 ## Usage
@@ -23,7 +23,7 @@ npm install [your-package-name]
 Below is a quick example of how to use the JS Validator:
 
 ```javascript
-const Validator = require('[your-package-name]');
+const Validator = require('@vmgware/js-validator');
 
 const rules = {
   email: { type: 'string', required: true, validate: 'email' },
