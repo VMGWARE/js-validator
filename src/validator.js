@@ -289,13 +289,13 @@ class Validator {
       }
 
       // Check for minimum length
-      if (rule.min !== undefined && value.length < rule.min) {
+      if (rule.min !== undefined && value < rule.min) {
         this.errors[key] = this.messages[key].min || "Too short";
         isValid = false;
       }
 
       // Check for maximum length
-      if (rule.max !== undefined && value.length > rule.max) {
+      if (rule.max !== undefined && value > rule.max) {
         this.errors[key] = this.messages[key].max || "Too long";
         isValid = false;
       }
