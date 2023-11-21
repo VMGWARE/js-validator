@@ -1,6 +1,6 @@
 /**
  * @typedef {Object} Rule
- * @property {'string' | 'number' | 'boolean'} type - The data type of the field.
+ * @property {'string' | 'number' | 'boolean' | 'integer' | 'float' | 'date'} type - The data type of the field.
  * @property {boolean} [required] - Whether the field is required.
  * @property {number} [min] - Minimum value/length.
  * @property {number} [max] - Maximum value/length.
@@ -38,7 +38,7 @@ class Validator {
    * @param {{ [key: string]: message }} messages - The error messages for each rule.
    * @param {Options} [options] - Additional options for validation.
    */
-  constructor(rules, messages, options = {}) {
+  constructor(rules = {}, messages = {}, options = {}) {
     this.#validateRulesFormat(rules);
     this.#validateMessagesFormat(messages);
     this.#validateOptionsFormat(options);
@@ -202,6 +202,33 @@ class Validator {
   }
 
   /**
+   * Validates if a value is an integer.
+   * @param {any} value - The value to validate.
+   * @returns {boolean} - Returns true if the value is an integer, otherwise false.
+   */
+  #isInteger(value) {
+    return Number.isInteger(value);
+  }
+
+  /**
+   * Validates if a value is a float.
+   * @param {any} value - The value to validate.
+   * @returns {boolean} - Returns true if the value is a float, otherwise false.
+   */
+  #isFloat(value) {
+    return typeof value === "number" && !Number.isInteger(value);
+  }
+
+  /**
+   * Validates if a value is a valid date.
+   * @param {any} value - The value to validate.
+   * @returns {boolean} - Returns true if the value is a valid date, otherwise false.
+   */
+  #isDate(value) {
+    return value instanceof Date && !isNaN(value);
+  }
+
+  /**
    * Validates the provided input against the predefined rules and sets error messages accordingly.
    * @param {Object} input - The input object with keys and values to validate.
    * @returns {Promise<boolean>} - Returns true if no validation errors, false otherwise. Asynchronous to support async custom validations.
@@ -225,9 +252,34 @@ class Validator {
       // If the value is not present, no need to check further rules
       if (value === undefined) continue;
 
-      // Check for correct type
-      if (typeof value !== rule.type) {
-        this.errors[key] = this.messages[key].type;
+      // Type-specific validations
+      if (rule.type === "string" && typeof value !== "string") {
+        this.errors[key] = this.messages[key].type || "Invalid string";
+        isValid = false;
+      }
+
+      if (rule.type === "number" && typeof value !== "number") {
+        this.errors[key] = this.messages[key].type || "Invalid number";
+        isValid = false;
+      }
+
+      if (rule.type === "boolean" && typeof value !== "boolean") {
+        this.errors[key] = this.messages[key].type || "Invalid boolean";
+        isValid = false;
+      }
+
+      if (rule.type === "integer" && !this.#isInteger(value)) {
+        this.errors[key] = this.messages[key].type || "Invalid integer";
+        isValid = false;
+      }
+
+      if (rule.type === "float" && !this.#isFloat(value)) {
+        this.errors[key] = this.messages[key].type || "Invalid float";
+        isValid = false;
+      }
+
+      if (rule.type === "date" && !this.#isDate(value)) {
+        this.errors[key] = this.messages[key].type || "Invalid date";
         isValid = false;
       }
 
