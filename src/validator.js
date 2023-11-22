@@ -35,7 +35,7 @@ class Validator {
   /**
    * Creates an instance of the Validator class.
    * @param {{ [key: string]: Rule }} rules - The validation rules for each field.
-   * @param {{ [key: string]: message }} messages - The error messages for each rule.
+   * @param {{ [key: string]: Message }} messages - The error messages for each rule.
    * @param {Options} [options] - Additional options for validation.
    */
   constructor(rules = {}, messages = {}, options = {}) {
