@@ -43,10 +43,34 @@ class Validator {
     this.#validateMessagesFormat(messages);
     this.#validateOptionsFormat(options);
 
+    /**
+     * The validation rules for each field.
+     * @type {{[p: string]: Rule}}
+     */
     this.rules = rules;
+
+    /**
+     * The error messages for each rule.
+     * @type {{[p: string]: Message}}
+     */
     this.messages = messages;
+
+    /**
+     * Additional options for validation.
+     * @type {Options}
+     */
     this.options = options;
+
+    /**
+     * The current validation errors.
+     * @type {Object}
+     */
     this.errors = {};
+
+    /**
+     * The fields that passed validation.
+     * @type {Object}
+     */
     this.passed = {};
   }
 
