@@ -10,7 +10,8 @@
   ],
   "scripts": {
     "build": "tsup",
-    "test": "jest"
+    "test": "jest",
+    "postversion": "tag=$(git tag --points-at HEAD) && git push origin $tag"
   },
   "repository": {
     "type": "git",
