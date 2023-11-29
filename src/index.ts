@@ -1,55 +1,85 @@
-/**
- * @typedef {Object} Rule
- * @property {'string' | 'number' | 'boolean' | 'integer' | 'float' | 'date'} type - The data type of the field.
- * @property {boolean} [required] - Whether the field is required.
- * @property {number} [min] - Minimum value/length.
- * @property {number} [max] - Maximum value/length.
- * @property {string} [match] - Field must match the value of this field.
- * @property {string} [validate] - Special validation ('email', etc.).
- * @property {Function} [custom] - Custom validation function. Should return true if valid.
- * @property {RegExp} [regex] - Regular expression to validate the field.
- */
 interface Rule {
+  /**
+   * The data type of the field.
+   */
   type: "string" | "number" | "boolean" | "integer" | "float" | "date";
+  /**
+   * Whether the field is required.
+   */
   required?: boolean;
+  /**
+   * Minimum value/length.
+   */
   min?: number;
+  /**
+   * Maximum value/length.
+   */
   max?: number;
+  /**
+   * Field must match the value of this field.
+   */
   match?: string;
+  /**
+   * Special validation ('email', etc.).
+   */
   validate?: string;
+  /**
+   * Custom validation function. Should return true if valid.
+   */
   custom?: (value: any) => boolean | Promise<boolean>;
+  /**
+   * Regular expression to validate the field.
+   */
   skip?: (input: any) => boolean;
+  /**
+   * Regular expression to validate the field.
+   */
   regex?: RegExp;
 }
 
-/**
- * @typedef {Object} Message
- * @property {string} type - The error message for incorrect type.
- * @property {string} [required] - The error message for missing required field.
- * @property {string} [min] - The error message for value/length below minimum.
- * @property {string} [max] - The error message for value/length above maximum.
- * @property {string} [match] - The error message for non-matching fields.
- * @property {string} [validate] - The error message for invalid email.
- * @property {string} [custom] - The error message for custom validation failure.
- * @property {string} [regex] - The error message for regex validation failure.
- */
 interface Message {
+  /**
+   * The error message for incorrect type.
+   */
   type: string;
+  /**
+   * The error message for missing required field.
+   */
   required?: string;
+  /**
+   * The error message for value/length below minimum.
+   */
   min?: string;
+  /**
+   * The error message for value/length above maximum.
+   */
   max?: string;
+  /**
+   * The error message for non-matching fields.
+   */
   match?: string;
+  /**
+   * The error message for invalid email.
+   */
   validate?: string;
+  /**
+   * The error message for custom validation failure.
+   */
   custom?: string;
+  /**
+   * The error message for regex validation failure.
+   */
   regex?: string;
 }
 
-/**
- * @typedef {Object} Options
- * @property {boolean} [trackPassedFields] - Whether to track fields that passed validation.
- * @property {boolean} [strictMode] - Flag to enable strict mode. If true, fields not defined in rules will be flagged as errors.
- */
 interface Options {
+  /**
+   * Whether to track fields that passed validation.
+   */
   trackPassedFields?: boolean;
+  /**
+   * Flag to enable strict mode. If true, fields not defined in rules will be flagged as errors.
+   */
   strictMode?: boolean;
 }
 
