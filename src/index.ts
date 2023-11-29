@@ -9,6 +9,17 @@
  * @property {Function} [custom] - Custom validation function. Should return true if valid.
  * @property {RegExp} [regex] - Regular expression to validate the field.
  */
+interface Rule {
+  type: "string" | "number" | "boolean" | "integer" | "float" | "date";
+  required?: boolean;
+  min?: number;
+  max?: number;
+  match?: string;
+  validate?: string;
+  custom?: (value: any) => boolean | Promise<boolean>;
+  skip?: (input: any) => boolean;
+  regex?: RegExp;
+}
 
 /**
  * @typedef {Object} Message
@@ -21,187 +32,53 @@
  * @property {string} [custom] - The error message for custom validation failure.
  * @property {string} [regex] - The error message for regex validation failure.
  */
+interface Message {
+  type: string;
+  required?: string;
+  min?: string;
+  max?: string;
+  match?: string;
+  validate?: string;
+  custom?: string;
+  regex?: string;
+}
 
 /**
  * @typedef {Object} Options
  * @property {boolean} [trackPassedFields] - Whether to track fields that passed validation.
  * @property {boolean} [strictMode] - Flag to enable strict mode. If true, fields not defined in rules will be flagged as errors.
  */
+interface Options {
+  trackPassedFields?: boolean;
+  strictMode?: boolean;
+}
 
 /**
  * A validation utility class for checking input against specified rules and outputting error messages.
  */
 class Validator {
+  private rules: { [key: string]: Rule };
+  private messages: { [key: string]: Message };
+  private options: Options;
+  private errors: { [key: string]: string };
+  private passed: { [key: string]: any };
+
   /**
    * Creates an instance of the Validator class.
    * @param {{ [key: string]: Rule }} rules - The validation rules for each field.
    * @param {{ [key: string]: Message }} messages - The error messages for each rule.
    * @param {Options} [options] - Additional options for validation.
    */
-  constructor(rules = {}, messages = {}, options = {}) {
-    this.#validateRulesFormat(rules);
-    this.#validateMessagesFormat(messages);
-    this.#validateOptionsFormat(options);
-
-    /**
-     * The validation rules for each field.
-     * @type {{[p: string]: Rule}}
-     */
+  constructor(
+    rules: { [key: string]: Rule },
+    messages: { [key: string]: Message },
+    options?: Options
+  ) {
     this.rules = rules;
-
-    /**
-     * The error messages for each rule.
-     * @type {{[p: string]: Message}}
-     */
     this.messages = messages;
-
-    /**
-     * Additional options for validation.
-     * @type {Options}
-     */
-    this.options = options;
-
-    /**
-     * The current validation errors.
-     * @type {Object}
-     */
+    this.options = options || {};
     this.errors = {};
-
-    /**
-     * The fields that passed validation.
-     * @type {Object}
-     */
     this.passed = {};
-  }
-
-  /**
-   * Checks if the rules object follows the expected format.
-   * @param {Object} rules - The rules object to validate.
-   */
-  #validateRulesFormat(rules) {
-    for (const key in rules) {
-      const rule = rules[key];
-      if (typeof rule !== "object" || Array.isArray(rule)) {
-        throw new Error(`The rule for '${key}' should be an object.`);
-      }
-      if (rule.type === undefined || typeof rule.type !== "string") {
-        throw new Error(
-          `The rule for '${key}' must include a 'type' property of type string.`
-        );
-      }
-      if (rule.required !== undefined && typeof rule.required !== "boolean") {
-        throw new Error(
-          `The 'required' property for '${key}' must be of type boolean.`
-        );
-      }
-      if (rule.min !== undefined && typeof rule.min !== "number") {
-        throw new Error(
-          `The 'min' property for '${key}' must be of type number.`
-        );
-      }
-      if (rule.max !== undefined && typeof rule.max !== "number") {
-        throw new Error(
-          `The 'max' property for '${key}' must be of type number.`
-        );
-      }
-      if (rule.match !== undefined && typeof rule.match !== "string") {
-        throw new Error(
-          `The 'match' property for '${key}' must be of type string.`
-        );
-      }
-      if (rule.validate !== undefined && typeof rule.validate !== "string") {
-        throw new Error(
-          `The 'validate' property for '${key}' must be of type string.`
-        );
-      }
-      if (rule.custom !== undefined && typeof rule.custom !== "function") {
-        throw new Error(
-          `The 'custom' property for '${key}' must be of type function.`
-        );
-      }
-      if (rule.regex !== undefined && !(rule.regex instanceof RegExp)) {
-        throw new Error(
-          `The 'regex' property for '${key}' must be of type RegExp.`
-        );
-      }
-    }
-  }
-
-  /**
-   * Checks if the options object follows the expected format.
-   * @param {Object} options - The options object to validate.
-   */
-  #validateOptionsFormat(options) {
-    if (typeof options !== "object" || Array.isArray(options)) {
-      throw new Error("The options should be an object.");
-    }
-    if (
-      options.trackPassedFields !== undefined &&
-      typeof options.trackPassedFields !== "boolean"
-    ) {
-      throw new Error(
-        `The 'trackPassedFields' property for options must be of type boolean.`
-      );
-    }
-  }
-
-  /**
-   * Checks if the messages object follows the expected format.
-   * @param {Object} messages - The messages object to validate.
-   */
-  #validateMessagesFormat(messages) {
-    for (const key in messages) {
-      const message = messages[key];
-      if (typeof message !== "object" || Array.isArray(message)) {
-        throw new Error(`The message for '${key}' should be an object.`);
-      }
-      if (message.type === undefined || typeof message.type !== "string") {
-        throw new Error(
-          `The message for '${key}' must include a 'type' property of type string.`
-        );
-      }
-      if (
-        message.required !== undefined &&
-        typeof message.required !== "string"
-      ) {
-        throw new Error(
-          `The 'required' property for '${key}' must be of type string.`
-        );
-      }
-      if (message.min !== undefined && typeof message.min !== "string") {
-        throw new Error(
-          `The 'min' property for '${key}' must be of type string.`
-        );
-      }
-      if (message.max !== undefined && typeof message.max !== "string") {
-        throw new Error(
-          `The 'max' property for '${key}' must be of type string.`
-        );
-      }
-      if (message.match !== undefined && typeof message.match !== "string") {
-        throw new Error(
-          `The 'match' property for '${key}' must be of type string.`
-        );
-      }
-      if (
-        message.validate !== undefined &&
-        typeof message.validate !== "string"
-      ) {
-        throw new Error(
-          `The 'validate' property for '${key}' must be of type string.`
-        );
-      }
-      if (message.custom !== undefined && typeof message.custom !== "string") {
-        throw new Error(
-          `The 'custom' property for '${key}' must be of type string.`
-        );
-      }
-      if (message.regex !== undefined && typeof message.regex !== "string") {
-        throw new Error(
-          `The 'regex' property for '${key}' must be of type string.`
-        );
-      }
-    }
   }
 
   /**
@@ -209,7 +86,7 @@ class Validator {
    * @param {string} email - The email address to validate.
    * @returns {boolean} Returns true if the email is valid, otherwise false.
    */
-  #validateEmail(email) {
+  #validateEmail(email: string): boolean {
     const re =
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
@@ -221,7 +98,7 @@ class Validator {
    * @param {RegExp} regex - The regular expression to use.
    * @returns {boolean} Returns true if the regex is valid, otherwise false.
    */
-  #validateRegex(value, regex) {
+  #validateRegex(value: string, regex: RegExp): boolean {
     return regex.test(value);
   }
 
@@ -230,7 +107,7 @@ class Validator {
    * @param {any} value - The value to validate.
    * @returns {boolean} Returns true if the value is an integer, otherwise false.
    */
-  #isInteger(value) {
+  #isInteger(value: any): boolean {
     return Number.isInteger(value);
   }
 
@@ -239,7 +116,7 @@ class Validator {
    * @param {any} value - The value to validate.
    * @returns {boolean} Returns true if the value is a float, otherwise false.
    */
-  #isFloat(value) {
+  #isFloat(value: any): boolean {
     return typeof value === "number" && !Number.isInteger(value);
   }
 
@@ -248,16 +125,16 @@ class Validator {
    * @param {any} value - The value to validate.
    * @returns {boolean} Returns true if the value is a valid date, otherwise false.
    */
-  #isDate(value) {
+  #isDate(value: any): boolean {
     return value instanceof Date && !Number.isNaN(value);
   }
 
   /**
-   * Validates the provided input against the predefined rules and sets error messages accordingly.
-   * @param {Object} input - The input object with keys and values to validate.
-   * @returns {Promise<boolean>} Returns true if no validation errors, false otherwise. Asynchronous to support async custom validations.
+   * Validates the input against the defined rules.
+   * @param {any} input - The input to validate.
+   * @returns {Promise<boolean>} - True if validation passes, false otherwise.
    */
-  async validate(input) {
+  async validate(input: any): Promise<boolean> {
     // Ensure input is an object
     if (typeof input !== "object" || Array.isArray(input)) {
       throw new Error("Input must be an object.");
@@ -397,52 +274,49 @@ class Validator {
 
   /**
    * Get the current validation errors.
-   * @returns {Object} The current errors.
+   * @returns {{ [key: string]: string }} - The current errors.
    */
-  getErrors() {
+  getErrors(): { [key: string]: string } {
     return this.errors;
   }
 
   /**
    * Get the fields that passed validation.
-   * @returns {Object} The fields that passed.
+   * @returns {{ [key: string]: any }} - The fields that passed.
    */
-  getPassedFields() {
+  getPassedFields(): { [key: string]: any } {
     return this.passed;
   }
 
   /**
    * Reset the validator state.
    */
-  reset() {
+  reset(): void {
     this.errors = {};
     this.passed = {};
   }
 
   /**
    * Update the validation rules.
-   * @param {Object} newRules - The new rules to update.
+   * @param {{ [key: string]: Rule }} newRules - The new rules to update.
    */
-  updateRules(newRules) {
-    this.#validateRulesFormat(newRules);
+  updateRules(newRules: { [key: string]: Rule }): void {
     this.rules = { ...this.rules, ...newRules };
   }
 
   /**
    * Update the validation messages.
-   * @param {Object} newMessages - The new messages to update.
+   * @param {{ [key: string]: Message }} newMessages - The new messages to update.
    */
-  updateMessages(newMessages) {
-    this.#validateMessagesFormat(newMessages);
+  updateMessages(newMessages: { [key: string]: Message }): void {
     this.messages = { ...this.messages, ...newMessages };
   }
 
   /**
    * Update the validation options.
-   * @param {Object} newOptions - The new options to update.
+   * @param {Options} newOptions - The new options to update.
    */
-  updateOptions(newOptions) {
-    this.#validateOptionsFormat(newOptions);
+  updateOptions(newOptions: Options): void {
     this.options = { ...this.options, ...newOptions };
   }
 }
