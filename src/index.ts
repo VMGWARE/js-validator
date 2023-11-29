@@ -55,12 +55,38 @@ interface Options {
 
 /**
  * A validation utility class for checking input against specified rules and outputting error messages.
+ *
+ * @class
  */
 class Validator {
+  /**
+   * The validation rules for each field.
+   * @type {{ [key: string]: Rule }}
+   */
   private rules: { [key: string]: Rule };
+
+  /**
+   * The error messages for each rule.
+   * @type {{ [key: string]: Message }}
+   */
   private messages: { [key: string]: Message };
+
+  /**
+   * Additional options for validation.
+   * @type {Options}
+   */
   private options: Options;
+
+  /**
+   * The current validation errors.
+   * @type {{ [key: string]: string }}
+   */
   private errors: { [key: string]: string };
+
+  /**
+   * The fields that passed validation.
+   * @type {{ [key: string]: any }}
+   */
   private passed: { [key: string]: any };
 
   /**
