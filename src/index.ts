@@ -347,4 +347,7 @@ class Validator {
   }
 }
 
+/**
+ * @typedef {Validator} Validator
+ */
 module.exports = Validator;
