@@ -188,7 +188,7 @@ export default class Validator {
   /**
    * Validates the input against the defined rules.
    * @param {any} input - The input to validate.
-   * @returns {Promise<boolean>} - True if validation passes, false otherwise.
+   * @returns {Promise<boolean>} True if validation passes, false otherwise.
    */
   async validate(input: any): Promise<boolean> {
     // Ensure input is an object
@@ -330,7 +330,7 @@ export default class Validator {
 
   /**
    * Get the current validation errors.
-   * @returns {{ [key: string]: string }} - The current errors.
+   * @returns {{ [key: string]: string }} The current errors.
    */
   getErrors(): { [key: string]: string } {
     return this.errors;
@@ -338,7 +338,7 @@ export default class Validator {
 
   /**
    * Get the fields that passed validation.
-   * @returns {{ [key: string]: any }} - The fields that passed.
+   * @returns {{ [key: string]: any }} The fields that passed.
    */
   getPassedFields(): { [key: string]: any } {
     return this.passed;
