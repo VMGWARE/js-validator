@@ -58,7 +58,7 @@ interface Options {
  *
  * @class
  */
-class Validator {
+export default class Validator {
   /**
    * The validation rules for each field.
    * @type {{ [key: string]: Rule }}
@@ -346,8 +346,3 @@ class Validator {
     this.options = { ...this.options, ...newOptions };
   }
 }
-
-/**
- * @typedef {Validator} Validator
- */
-module.exports = Validator;
