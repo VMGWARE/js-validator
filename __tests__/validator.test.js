@@ -1,6 +1,6 @@
 // file deepcode ignore NoHardcodedPasswords/test: Not a real password
 
-const Validator = require("../src/validator");
+const Validator = require("../src/index");
 
 describe("Validator - Type", () => {
   it("should validate simple string rules", () => {

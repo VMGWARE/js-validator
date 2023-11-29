@@ -132,3 +132,6 @@ dist
 # Ignore IDE files
 .idea
 .vscode
+
+# Build files
+/dist
