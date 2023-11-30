@@ -40,9 +40,9 @@ const rules = {
 
 // Custom error messages for each rule
 const messages = {
-  username: { required: 'Username is required', min: 'Username must be at least 3 characters' },
-  email: { required: 'Email is required', validate: 'Invalid email format' },
-  age: { min: 'You must be at least 18 years old' }
+  username: { type: 'Username must be a string', required: 'Username is required', min: 'Username must be at least 3 characters' },
+  email: { type: 'Email must be a string', required: 'Email is required', validate: 'Invalid email format' },
+  age: { type: 'Age must be a number', min: 'Age must be at least 18' }
 };
 
 // Initialize the validator
