@@ -7,15 +7,5 @@ module.exports = {
   rules: {
     "@typescript-eslint/no-explicit-any": "off",
   },
-  ignorePatterns: [
-    "**/*.js",
-    "**/*.jsx",
-    "**/*.ts",
-    "**/*.tsx",
-    "**/*.d.ts",
-    "**/*.cjs",
-    "**/*.mjs",
-    "**/*.json",
-    "**/*.md",
-  ],
+  ignorePatterns: ["dist", "node_modules", "__tests__"],
 };
