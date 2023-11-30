@@ -53,11 +53,6 @@ jobs:
       - npm test -- --json --outputFile=testResults.json
     useTTY: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
-  - !PublishJestTestReportStep
-    name: publish test report
-    reportName: Jest Test Report
-    filePatterns: testResults.json
-    condition: ALWAYS
   triggers:
   - !BranchUpdateTrigger {}
   - !PullRequestUpdateTrigger {}
