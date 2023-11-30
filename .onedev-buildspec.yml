@@ -33,26 +33,3 @@ jobs:
   maxRetries: 3
   retryDelay: 30
   timeout: 3600
-- name: CI
-  steps:
-  - !CheckoutStep
-    name: checkout
-    cloneCredential: !DefaultCredential {}
-    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
-  - !CommandStep
-    name: test
-    image: node:18
-    commands:
-    - 'npm ci'
-    - 'npm run lint'
-    - 'npm run test'
-    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
-  triggers:
-  - !BranchUpdateTrigger {}
-  - !PullRequestUpdateTrigger {}
-  retryCondition: never
-  maxRetries: 3
-  retryDelay: 30
-  cpuRequirement: 250m
-  memoryRequirement: 128m
-  timeout: 360000
