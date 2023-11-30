@@ -13,6 +13,8 @@ JS Validator is a comprehensive JavaScript validation library designed to ensure
 - **Documentation**: Comprehensive documentation for ease of use.
 - **TypeScript Support**: Provides type safety for TypeScript applications.
   - Should be noted that it is still in development. So issues may arise.
+- **Lightweight**: Small library size with no external dependencies.
+- **Open Source**: MIT License allows for wide usage and modification.
 
 ## Installation
 
