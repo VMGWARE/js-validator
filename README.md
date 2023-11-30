@@ -174,9 +174,16 @@ const validator = new Validator(rules, messages, options);
 - `getErrors()`: Retrieves current validation errors.
 - `getPassedFields()`: Gets fields that passed validation.
 - `reset()`: Resets the validator's state.
+- `updateRules(rules)`: Updates the validation rules.
+- `updateMessages(messages)`: Updates the error messages.
+- `updateOptions(options)`: Updates the validator's options.
 
 ## License
 
-This library is open-sourced under the MIT License, allowing for wide usage and modification.
+This library is open-sourced under the MIT License, allowing for wide usage and modification. See the [LICENSE](LICENSE) file for details. Feel free to submit issues and pull requests to help improve the library.
 
-By understanding and utilizing the features of JS Validator, developers can ensure robust and user-friendly data validation in their JavaScript applications.
+## Who should use this library?
+
+This library is ideal for developers who want a simple, yet powerful validation library for their JavaScript or TypeScript applications. It's suitable for a wide range of use cases, from simple form validations to complex business logic.
+
+Now that the random text is over, I would like to say that this library is for anyone who wants to use it. I made it for projects of VMG Ware as a central validation library. But I thought it would be nice to share it with the world. So here it is. I hope you enjoy it.
