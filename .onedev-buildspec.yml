@@ -15,3 +15,18 @@ jobs:
   maxRetries: 3
   retryDelay: 30
   timeout: 3600
+- name: Pull from GitHub
+  steps:
+  - !PullRepository
+    name: pull
+    remoteUrl: https://github.com/VMGWARE/js-validator
+    syncToChildProject: false
+    passwordSecret: access-token
+    refs: refs/heads/* refs/tags/*
+    withLfs: false
+    force: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  retryCondition: never
+  maxRetries: 3
+  retryDelay: 30
+  timeout: 3600
