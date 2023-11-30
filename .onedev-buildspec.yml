@@ -33,3 +33,30 @@ jobs:
   maxRetries: 3
   retryDelay: 30
   timeout: 3600
+- name: Build
+  steps:
+  - !CheckoutStep
+    name: checkout
+    cloneCredential: !DefaultCredential {}
+    withLfs: false
+    withSubmodules: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !CommandStep
+    name: build & test
+    runInContainer: true
+    image: node:18
+    interpreter: !DefaultInterpreter
+      commands:
+      - npm ci
+      - export CI=TRUE
+      - npm run lint
+      - npm test
+    useTTY: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  triggers:
+  - !BranchUpdateTrigger {}
+  - !PullRequestUpdateTrigger {}
+  retryCondition: never
+  maxRetries: 3
+  retryDelay: 30
+  timeout: 3600
