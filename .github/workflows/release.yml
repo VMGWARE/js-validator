@@ -19,6 +19,8 @@ jobs:
       - name: 📦 install
         run: npm install
         working-directory: .
+      - name: 🧹 lint
+        run: npm run lint
       - name: 🏗️ build
         run: npm run build
         working-directory: .
