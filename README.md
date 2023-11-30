@@ -11,6 +11,8 @@ JS Validator is a comprehensive JavaScript validation library designed to ensure
 - **Strict Mode Option**: Enforces validation against all input fields, flagging any that aren't explicitly defined in the rules.
 - **Error and Success Tracking**: Methods to retrieve fields that failed or passed validation.
 - **Documentation**: Comprehensive documentation for ease of use.
+- **TypeScript Support**: Provides type safety for TypeScript applications.
+  - Should be noted that it is still in development. So issues may arise.
 
 ## Installation
 
@@ -22,7 +24,7 @@ npm install @vmgware/js-validator
 
 ## Detailed Usage Examples
 
-### Basic Example: Form Validation
+### JavaScript Example: Form Validation
 
 Here's a basic example to validate a user registration form:
 
@@ -58,6 +60,66 @@ validator.validate(userData).then(isValid => {
   }
 });
 ```
+
+### TypeScript Example: Validating a User Profile
+
+In this example, we'll validate a user profile form using TypeScript. TypeScript allows us to define interfaces for our data, making the code more robust and easier to understand.
+
+First, define an interface for the user data:
+
+```typescript
+interface UserProfile {
+  username: string;
+  email: string;
+  birthdate: Date;
+}
+```
+
+Now, let's use JS Validator to validate this data:
+
+```typescript
+import Validator from '@vmgware/js-validator';
+
+// Define validation rules according to the UserProfile interface
+const rules = {
+  username: { type: 'string', required: true, min: 3 },
+  email: { type: 'string', required: true, validate: 'email' },
+  birthdate: { type: 'date', required: true }
+};
+
+// Custom error messages
+const messages = {
+  username: { type: 'Username must be a string', required: 'Username is required', min: 'Username must be at least 3 characters' },
+  email: { type: 'Email must be a string', required: 'Email is required', validate: 'Invalid email format' },
+  birthdate: { type: 'Birthdate must be a date', required: 'Birthdate is required' }
+};
+
+// Initialize the validator
+const validator = new Validator<UserProfile>(rules, messages);
+
+// Sample user data to validate
+const userProfile: UserProfile = {
+  username: 'janedoe',
+  email: 'jane@example.com',
+  birthdate: new Date('1990-01-01')
+};
+
+// Perform validation
+validator.validate(userProfile).then(isValid => {
+  if (isValid) {
+    console.log('User profile is valid');
+  } else {
+    console.log('Validation errors:', validator.getErrors());
+  }
+});
+```
+
+In this TypeScript example:
+
+- We define an interface `UserProfile` to enforce the structure of user data.
+- The validation rules and messages are set up in a similar way as in JavaScript.
+- The `Validator` is initialized with the type parameter `UserProfile` to ensure type safety.
+- The `validate` method is used to check if the user data conforms to the specified rules.
 
 ### Why Use Custom Error Messages?
 
