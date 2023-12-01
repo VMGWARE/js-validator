@@ -2,7 +2,7 @@ interface Rule {
   /**
    * The data type of the field.
    */
-  type: "string" | "number" | "boolean" | "integer" | "float" | "date";
+  type?: "string" | "number" | "boolean" | "integer" | "float" | "date";
   /**
    * Whether the field is required.
    */
@@ -41,7 +41,7 @@ interface Message {
   /**
    * The error message for incorrect type.
    */
-  type: string;
+  type?: string;
   /**
    * The error message for missing required field.
    */

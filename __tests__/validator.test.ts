@@ -4,6 +4,20 @@
 import Validator from "../src/index";
 
 describe("Validator - Type", () => {
+  it("should validate rule with no type", () => {
+    const validator = new Validator(
+      { name: { required: true } },
+      {
+        name: {
+          required: "Name is required",
+        },
+      }
+    );
+
+    expect(validator.validate({ name: "John Doe" })).resolves.toBe(true);
+    expect(validator.validate({})).resolves.toBe(false);
+  });
+
   it("should validate simple string rules", () => {
     const validator = new Validator(
       { name: { type: "string", required: true } },
