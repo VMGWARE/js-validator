@@ -79,6 +79,8 @@ jobs:
     image: node:18
     interpreter: !DefaultInterpreter
       commands:
+      - npm ci
+      - npm run build
       - echo //registry.npmjs.org/:_authToken=@secret:NODE_AUTH_TOKEN@ >> .npmrc
       - echo email=@secret:NODE_AUTH_EMAIL@ >> .npmrc
       - echo always-auth=true >> .npmrc
