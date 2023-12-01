@@ -16,12 +16,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://onedev.vmgware.dev/js-validator"
+    "url": "https://onedev.vmgware.dev/js-validator"
   },
-  "author": "VMG Ware",
+  "author": "VMG Ware <contact@vmgware.dev> (https://vmgware.dev)",
   "license": "MIT",
   "bugs": {
-    "url": "https://onedev.vmgware.dev/js-validator/~issues"
+    "url": "https://onedev.vmgware.dev/js-validator/~issues",
+    "email": "bugs@vmgware.dev"
   },
   "homepage": "https://onedev.vmgware.dev/js-validator#readme",
   "devDependencies": {
