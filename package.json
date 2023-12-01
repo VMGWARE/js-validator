@@ -16,14 +16,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/VMGWARE/js-validator.git"
+    "url": "git+https://onedev.vmgware.dev/js-validator"
   },
   "author": "VMG Ware",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/VMGWARE/js-validator/issues"
+    "url": "https://onedev.vmgware.dev/js-validator/issues"
   },
-  "homepage": "https://github.com/VMGWARE/js-validator#readme",
+  "homepage": "https://onedev.vmgware.dev/js-validator#readme",
   "devDependencies": {
     "@types/jest": "^29.5.10",
     "@typescript-eslint/eslint-plugin": "^6.13.1",
