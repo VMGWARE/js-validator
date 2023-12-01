@@ -21,7 +21,7 @@
   "author": "VMG Ware",
   "license": "MIT",
   "bugs": {
-    "url": "https://onedev.vmgware.dev/js-validator/issues"
+    "url": "https://onedev.vmgware.dev/js-validator/~issues"
   },
   "homepage": "https://onedev.vmgware.dev/js-validator#readme",
   "devDependencies": {
