@@ -348,7 +348,9 @@ describe("Validator - Options", () => {
     validator.validate({ name: "John Doe", age: 20 });
 
     // Contains { name: "John Doe", age: 20}
-    expect(validator.getErrors()).toEqual({ age: "Field is not allowed" });
+    expect(validator.getErrors()).toEqual({
+      age: '"age" is not a recognized field and cannot be processed.',
+    });
   });
 });
 

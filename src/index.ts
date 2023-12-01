@@ -138,23 +138,26 @@ export default class Validator {
   }
 
   /**
-   * Validates an email address with a regular expression.
+   * Validates an email address.
    * @param {string} email - The email address to validate.
    * @returns {boolean} Returns true if the email is valid, otherwise false.
    */
-  #validateEmail(email: string): boolean {
+  static isEmail(email: string): boolean {
+    // We only need to check for the presence of @ and .
+    // This ensures that the email is at least in the correct format.
+    // But going beyond this is not recommended as it is very difficult to validate an email address correctly.
     const re =
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(String(email).toLowerCase());
   }
 
   /**
-   * Validates a value with a regular expression.
+   * Validates a string against a regular expression.
    * @param {string} value - The value to validate.
    * @param {RegExp} regex - The regular expression to use.
    * @returns {boolean} Returns true if the regex is valid, otherwise false.
    */
-  #validateRegex(value: string, regex: RegExp): boolean {
+  static isValidRegex(value: string, regex: RegExp): boolean {
     return regex.test(value);
   }
 
@@ -163,7 +166,7 @@ export default class Validator {
    * @param {any} value - The value to validate.
    * @returns {boolean} Returns true if the value is an integer, otherwise false.
    */
-  #isInteger(value: any): boolean {
+  static isInteger(value: any): boolean {
     return Number.isInteger(value);
   }
 
@@ -172,7 +175,7 @@ export default class Validator {
    * @param {any} value - The value to validate.
    * @returns {boolean} Returns true if the value is a float, otherwise false.
    */
-  #isFloat(value: any): boolean {
+  static isFloat(value: any): boolean {
     return typeof value === "number" && !Number.isInteger(value);
   }
 
@@ -181,7 +184,7 @@ export default class Validator {
    * @param {any} value - The value to validate.
    * @returns {boolean} Returns true if the value is a valid date, otherwise false.
    */
-  #isDate(value: any): boolean {
+  static isDate(value: any): boolean {
     return value instanceof Date && !Number.isNaN(value);
   }
 
@@ -211,7 +214,9 @@ export default class Validator {
 
       // Check for required field
       if (rule.required && (value === "" || value === undefined)) {
-        this.errors[key] = this.messages[key].required || "Field is required";
+        this.errors[key] =
+          this.messages[key].required ||
+          `"${key}" is a required field and cannot be empty.`;
         isValid = false;
         continue; // Skip further checks if the field is missing
       }
@@ -221,32 +226,44 @@ export default class Validator {
 
       // Type-specific validations
       if (rule.type === "string" && typeof value !== "string") {
-        this.errors[key] = this.messages[key].type || "Invalid string";
+        this.errors[key] =
+          this.messages[key].type ||
+          `Expected a ${rule.type}, but received ${typeof value}`;
         isValid = false;
       }
 
       if (rule.type === "number" && typeof value !== "number") {
-        this.errors[key] = this.messages[key].type || "Invalid number";
+        this.errors[key] =
+          this.messages[key].type ||
+          `Expected a ${rule.type}, but received ${typeof value}`;
         isValid = false;
       }
 
       if (rule.type === "boolean" && typeof value !== "boolean") {
-        this.errors[key] = this.messages[key].type || "Invalid boolean";
+        this.errors[key] =
+          this.messages[key].type ||
+          `Expected a ${rule.type}, but received ${typeof value}`;
         isValid = false;
       }
 
-      if (rule.type === "integer" && !this.#isInteger(value)) {
-        this.errors[key] = this.messages[key].type || "Invalid integer";
+      if (rule.type === "integer" && !Validator.isInteger(value)) {
+        this.errors[key] =
+          this.messages[key].type ||
+          `Expected a ${rule.type}, but received ${typeof value}`;
         isValid = false;
       }
 
-      if (rule.type === "float" && !this.#isFloat(value)) {
-        this.errors[key] = this.messages[key].type || "Invalid float";
+      if (rule.type === "float" && !Validator.isFloat(value)) {
+        this.errors[key] =
+          this.messages[key].type ||
+          `Expected a ${rule.type}, but received ${typeof value}`;
         isValid = false;
       }
 
-      if (rule.type === "date" && !this.#isDate(value)) {
-        this.errors[key] = this.messages[key].type || "Invalid date";
+      if (rule.type === "date" && !Validator.isDate(value)) {
+        this.errors[key] =
+          this.messages[key].type ||
+          `Expected a ${rule.type}, but received ${typeof value}`;
         isValid = false;
       }
 
@@ -254,12 +271,16 @@ export default class Validator {
       if (rule.min !== undefined) {
         // If the value is a string, check the length
         if (typeof value === "string" && value.length < rule.min) {
-          this.errors[key] = this.messages[key].min || "Too short";
+          this.errors[key] =
+            this.messages[key].min ||
+            `"${key}" should be at least ${rule.min} characters long (or greater if a number).`;
           isValid = false;
         }
         // If the value is a number, check the value
         if (typeof value === "number" && value < rule.min) {
-          this.errors[key] = this.messages[key].min || "Too short";
+          this.errors[key] =
+            this.messages[key].min ||
+            `"${key}" should be at least ${rule.min} characters long (or greater if a number).`;
           isValid = false;
         }
       }
@@ -268,31 +289,41 @@ export default class Validator {
       if (rule.max !== undefined) {
         // If the value is a string, check the length
         if (typeof value === "string" && value.length > rule.max) {
-          this.errors[key] = this.messages[key].max || "Too long";
+          this.errors[key] =
+            this.messages[key].max ||
+            `"${key}" should not exceed ${rule.max} characters (or be less if a number).`;
           isValid = false;
         }
         // If the value is a number, check the value
         if (typeof value === "number" && value > rule.max) {
-          this.errors[key] = this.messages[key].max || "Too long";
+          this.errors[key] =
+            this.messages[key].max ||
+            `"${key}" should not exceed ${rule.max} characters (or be less if a number).`;
           isValid = false;
         }
       }
 
       // Check for valid email
-      if (rule.validate === "email" && !this.#validateEmail(value)) {
-        this.errors[key] = this.messages[key].validate || "Invalid email";
+      if (rule.validate === "email" && !Validator.isEmail(value)) {
+        this.errors[key] =
+          this.messages[key].validate ||
+          `"${key}" is not a valid email address. Please enter a valid email.`;
         isValid = false;
       }
 
       // Check for matching fields
       if (rule.match && value !== input[rule.match]) {
-        this.errors[key] = this.messages[key].match || "Fields do not match";
+        this.errors[key] =
+          this.messages[key].match ||
+          `"${key}" must match with the "${rule.match}" field.`;
         isValid = false;
       }
 
       // Check for regex
-      if (rule.regex && !this.#validateRegex(value, rule.regex)) {
-        this.errors[key] = this.messages[key].regex || "Invalid value";
+      if (rule.regex && !Validator.isValidRegex(value, rule.regex)) {
+        this.errors[key] =
+          this.messages[key].regex ||
+          `"${key}" does not match the required format.`;
         isValid = false;
       }
 
@@ -301,7 +332,8 @@ export default class Validator {
         const customValid = await rule.custom(value);
         if (!customValid) {
           this.errors[key] =
-            this.messages[key].custom || "Custom validation failed";
+            this.messages[key].custom ||
+            `Custom validation for "${key}" failed. Ensure it meets the specific requirements.`;
           isValid = false;
         }
       }
@@ -311,7 +343,9 @@ export default class Validator {
     if (this.options.strictMode) {
       for (const key in input) {
         if (!this.rules[key]) {
-          this.errors[key] = "Field is not allowed";
+          this.errors[
+            key
+          ] = `"${key}" is not a recognized field and cannot be processed.`;
           isValid = false;
         }
       }
