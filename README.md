@@ -31,34 +31,42 @@ npm install @vmgware/js-validator
 Here's a basic example to validate a user registration form:
 
 ```javascript
-const Validator = require('@vmgware/js-validator');
+const Validator = require("@vmgware/js-validator");
 
 // Define validation rules
 const rules = {
-  username: { type: 'string', required: true, min: 3 },
-  email: { type: 'string', required: true, validate: 'email' },
-  age: { type: 'number', min: 18 }
+  username: { type: "string", required: true, min: 3 },
+  email: { type: "string", required: true, validate: "email" },
+  age: { type: "number", min: 18 },
 };
 
 // Custom error messages for each rule
 const messages = {
-  username: { type: 'Username must be a string', required: 'Username is required', min: 'Username must be at least 3 characters' },
-  email: { type: 'Email must be a string', required: 'Email is required', validate: 'Invalid email format' },
-  age: { type: 'Age must be a number', min: 'Age must be at least 18' }
+  username: {
+    type: "Username must be a string",
+    required: "Username is required",
+    min: "Username must be at least 3 characters",
+  },
+  email: {
+    type: "Email must be a string",
+    required: "Email is required",
+    validate: "Invalid email format",
+  },
+  age: { type: "Age must be a number", min: "Age must be at least 18" },
 };
 
 // Initialize the validator
 const validator = new Validator(rules, messages);
 
 // Sample data to validate
-const userData = { username: 'johndoe', email: 'john@example.com', age: 20 };
+const userData = { username: "johndoe", email: "john@example.com", age: 20 };
 
 // Perform validation
-validator.validate(userData).then(isValid => {
+validator.validate(userData).then((isValid) => {
   if (isValid) {
-    console.log('Registration valid');
+    console.log("Registration valid");
   } else {
-    console.log('Validation errors:', validator.getErrors());
+    console.log("Validation errors:", validator.getErrors());
   }
 });
 ```
@@ -80,20 +88,31 @@ interface UserProfile {
 Now, let's use JS Validator to validate this data:
 
 ```typescript
-import Validator from '@vmgware/js-validator';
+import Validator from "@vmgware/js-validator";
 
 // Define validation rules according to the UserProfile interface
 const rules = {
-  username: { type: 'string', required: true, min: 3 },
-  email: { type: 'string', required: true, validate: 'email' },
-  birthdate: { type: 'date', required: true }
+  username: { type: "string", required: true, min: 3 },
+  email: { type: "string", required: true, validate: "email" },
+  birthdate: { type: "date", required: true },
 };
 
 // Custom error messages
 const messages = {
-  username: { type: 'Username must be a string', required: 'Username is required', min: 'Username must be at least 3 characters' },
-  email: { type: 'Email must be a string', required: 'Email is required', validate: 'Invalid email format' },
-  birthdate: { type: 'Birthdate must be a date', required: 'Birthdate is required' }
+  username: {
+    type: "Username must be a string",
+    required: "Username is required",
+    min: "Username must be at least 3 characters",
+  },
+  email: {
+    type: "Email must be a string",
+    required: "Email is required",
+    validate: "Invalid email format",
+  },
+  birthdate: {
+    type: "Birthdate must be a date",
+    required: "Birthdate is required",
+  },
 };
 
 // Initialize the validator
@@ -101,17 +120,17 @@ const validator = new Validator<UserProfile>(rules, messages);
 
 // Sample user data to validate
 const userProfile: UserProfile = {
-  username: 'janedoe',
-  email: 'jane@example.com',
-  birthdate: new Date('1990-01-01')
+  username: "janedoe",
+  email: "jane@example.com",
+  birthdate: new Date("1990-01-01"),
 };
 
 // Perform validation
-validator.validate(userProfile).then(isValid => {
+validator.validate(userProfile).then((isValid) => {
   if (isValid) {
-    console.log('User profile is valid');
+    console.log("User profile is valid");
   } else {
-    console.log('Validation errors:', validator.getErrors());
+    console.log("Validation errors:", validator.getErrors());
   }
 });
 ```
@@ -143,7 +162,7 @@ rules.username.custom = async (username) => {
   return await isUsernameAvailable(username);
 };
 
-messages.username.custom = 'Username is already taken';
+messages.username.custom = "Username is already taken";
 
 // Usage remains the same as before
 ```
@@ -179,6 +198,12 @@ const validator = new Validator(rules, messages, options);
 - `updateRules(rules)`: Updates the validation rules.
 - `updateMessages(messages)`: Updates the error messages.
 - `updateOptions(options)`: Updates the validator's options.
+
+## Contributing
+
+We welcome contributions to this library. Feel free to submit issues and pull requests to help improve the library.
+
+For those writing commits, please follow the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification. This helps us maintain a consistent commit history and generate changelogs automatically.
 
 ## License
 
