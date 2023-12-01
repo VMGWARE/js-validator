@@ -12,7 +12,7 @@
     "build": "tsup",
     "test": "jest",
     "postversion": "tag=$(git tag --points-at HEAD) && git push origin $tag",
-    "lint": "eslint src/**/*.* --ext .js,.ts"
+    "lint": "eslint"
   },
   "repository": {
     "type": "git",
