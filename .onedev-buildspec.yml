@@ -64,3 +64,29 @@ jobs:
   maxRetries: 3
   retryDelay: 30
   timeout: 3600
+- name: Sync Main (GitHub)
+  steps:
+  - !CheckoutStep
+    name: checkout
+    cloneCredential: !DefaultCredential {}
+    withLfs: false
+    withSubmodules: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !CommandStep
+    name: sync
+    runInContainer: true
+    image: alpine/git:1.0.7
+    interpreter: !DefaultInterpreter
+      commands:
+      - git config --global --unset http.extraHeader
+      - git push -f https://codycody31:@secrets:access-token@@@github.com/VMGWARE/js-validator.git HEAD:main
+    useTTY: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  triggers:
+  - !BranchUpdateTrigger
+    branches: main
+    projects: js-validator
+  retryCondition: never
+  maxRetries: 3
+  retryDelay: 30
+  timeout: 3600
