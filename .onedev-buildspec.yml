@@ -25,6 +25,16 @@ jobs:
     reportName: Jest Test Report
     filePatterns: testResults.json
     condition: ALWAYS
+  - !PublishESLintReportStep
+    name: publish eslint report
+    reportName: ESLint Violations
+    filePatterns: lintResults.xml
+    condition: ALWAYS
+  - !PublishJestCoverageReportStep
+    name: publish jest coverage report
+    reportName: Jest Test Coverage
+    filePatterns: coverage/clover.xml
+    condition: ALWAYS
   triggers:
   - !BranchUpdateTrigger {}
   - !PullRequestUpdateTrigger {}
