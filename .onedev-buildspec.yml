@@ -65,3 +65,31 @@ jobs:
   maxRetries: 3
   retryDelay: 30
   timeout: 3600
+- name: Deploy
+  steps:
+  - !CheckoutStep
+    name: checkout
+    cloneCredential: !DefaultCredential {}
+    withLfs: false
+    withSubmodules: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !CommandStep
+    name: publish
+    runInContainer: true
+    image: node:18
+    interpreter: !DefaultInterpreter
+      commands:
+      - npm publish --access public
+    useTTY: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  triggers:
+  - !TagCreateTrigger
+    branches: main
+  jobDependencies:
+  - jobName: Build
+    requireSuccessful: true
+    artifacts: '**'
+  retryCondition: never
+  maxRetries: 3
+  retryDelay: 30
+  timeout: 3600
