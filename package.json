@@ -12,7 +12,8 @@
     "build": "tsup",
     "test": "jest",
     "postversion": "tag=$(git tag --points-at HEAD) && git push origin $tag",
-    "lint": "eslint"
+    "lint": "eslint",
+    "lint:ci": "eslint --ext .ts src/ -f checkstyle -o lintResults.xml"
   },
   "repository": {
     "type": "git",

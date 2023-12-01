@@ -16,8 +16,8 @@ jobs:
       commands:
       - npm ci
       - export CI=TRUE
-      - npm run lint
-      - npm test -- --json --outputFile=testResults.json
+      - npm run lint:ci
+      - npm test -- --coverage --json --outputFile=testResults.json
     useTTY: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !PublishJestReportStep
