@@ -79,6 +79,7 @@ jobs:
     image: node:18
     interpreter: !DefaultInterpreter
       commands:
+      - export NODE_AUTH_TOKEN=@secret:NODE_AUTH_TOKEN@
       - npm publish --access public
     useTTY: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
