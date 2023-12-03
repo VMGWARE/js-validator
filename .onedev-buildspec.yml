@@ -65,9 +65,7 @@ jobs:
     useTTY: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   triggers:
-  - !TagCreateTrigger
-    branches: main
-    projects: js-validator
+  - !TagCreateTrigger {}
   jobDependencies:
   - jobName: Build
     requireSuccessful: true
