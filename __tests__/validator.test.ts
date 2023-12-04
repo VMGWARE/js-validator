@@ -1,5 +1,4 @@
 // file deepcode ignore NoHardcodedPasswords/test: Not a real password
-// TODO: See if I can export interfaces from the src folder
 
 import Validator from "../src/index";
 
