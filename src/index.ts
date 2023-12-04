@@ -1,3 +1,6 @@
+/**
+ * The validation rules for each field.
+ */
 interface Rule {
   /**
    * The data type of the field.
@@ -37,6 +40,9 @@ interface Rule {
   regex?: RegExp;
 }
 
+/**
+ * The error messages for each rule.
+ */
 interface Message {
   /**
    * The error message for incorrect type.
@@ -72,6 +78,29 @@ interface Message {
   regex?: string;
 }
 
+/**
+ * The validation rules for entire input.
+ */
+interface Rules {
+  /**
+   * Key-value pairs of validation rules for each field.
+   */
+  [key: string]: Rule;
+}
+
+/**
+ * The error messages for each rule.
+ */
+interface Messages {
+  /**
+   * Key-value pairs of error messages for each rule.
+   */
+  [key: string]: Message;
+}
+
+/**
+ * Additional options for validation.
+ */
 interface Options {
   /**
    * Whether to track fields that passed validation.
@@ -146,8 +175,7 @@ export default class Validator {
     // We only need to check for the presence of @ and .
     // This ensures that the email is at least in the correct format.
     // But going beyond this is not recommended as it is very difficult to validate an email address correctly.
-    const re =
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(String(email).toLowerCase());
   }
 
@@ -410,3 +438,12 @@ export default class Validator {
     this.options = { ...this.options, ...newOptions };
   }
 }
+
+// Export types
+export type {
+  Rule as RuleType,
+  Rules as RulesType,
+  Message as MessageType,
+  Messages as MessagesType,
+  Options as OptionsType,
+};
