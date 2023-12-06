@@ -117,7 +117,7 @@ interface Options {
  *
  * @class
  */
-export default class Validator {
+class Validator {
   /**
    * The validation rules for each field.
    * @type {{ [key: string]: Rule }}
@@ -447,3 +447,7 @@ export type {
   Messages as MessagesType,
   Options as OptionsType,
 };
+
+// Export class
+export default Validator;
+module.exports = Validator;
