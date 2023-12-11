@@ -1,6 +1,6 @@
 version: 25
 jobs:
-- name: Build
+- name: Test & Build
   steps:
   - !CheckoutStep
     name: checkout
@@ -9,7 +9,7 @@ jobs:
     withSubmodules: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !CommandStep
-    name: build & test
+    name: test & build
     runInContainer: true
     image: node:18
     interpreter: !DefaultInterpreter
@@ -38,6 +38,8 @@ jobs:
   triggers:
   - !BranchUpdateTrigger {}
   - !PullRequestUpdateTrigger {}
+  - !TagCreateTrigger
+    branches: main
   retryCondition: never
   maxRetries: 3
   retryDelay: 30
@@ -67,9 +69,8 @@ jobs:
   triggers:
   - !TagCreateTrigger
     branches: main
-    projects: js-validator
   jobDependencies:
-  - jobName: Build
+  - jobName: Test & Build
     requireSuccessful: true
     artifacts: '**'
   retryCondition: never
