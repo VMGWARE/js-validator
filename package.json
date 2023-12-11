@@ -9,7 +9,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "tsup --cjsInterop",
     "test": "jest",
     "pushversion": "tag=$(git tag --points-at HEAD) && git push origin $tag",
     "lint": "eslint",
