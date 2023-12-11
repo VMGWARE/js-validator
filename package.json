@@ -1,6 +1,6 @@
 {
   "name": "@vmgware/js-validator",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "A versatile and easy-to-use JavaScript validation library for ensuring data integrity with extensive customization options.",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
