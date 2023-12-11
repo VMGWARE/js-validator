@@ -31,7 +31,7 @@ npm install @vmgware/js-validator
 Here's a basic example to validate a user registration form:
 
 ```javascript
-const Validator = require("@vmgware/js-validator");
+const Validator = require("@vmgware/js-validator").default;
 
 // Define validation rules
 const rules = {
