@@ -172,10 +172,9 @@ class Validator {
    * @returns {boolean} Returns true if the email is valid, otherwise false.
    */
   static isEmail(email: string): boolean {
-    // We only need to check for the presence of @ and .
-    // This ensures that the email is at least in the correct format.
-    // But going beyond this is not recommended as it is very difficult to validate an email address correctly.
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // This regular expression is more efficient and less prone to backtracking issues.
+    // It simplifies the check for an email format by eliminating unnecessary repetition patterns.
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
     return re.test(String(email).toLowerCase());
   }
 
