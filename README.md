@@ -205,6 +205,8 @@ We welcome contributions to this library. Feel free to submit issues and pull re
 
 For those writing commits, please follow the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification. This helps us maintain a consistent commit history and generate changelogs automatically.
 
+Also, when making changes, only push to the `develop` branch. The `main` branch is reserved for stable releases as semantic-release will automatically publish to npm from there. The `develop` branch is used for development and testing, PR's will be squashed and merged into `develop` and then when ready, `develop` will be merged into `main`.
+
 ## License
 
 This library is open-sourced under the MIT License, allowing for wide usage and modification. See the [LICENSE](LICENSE) file for details. Feel free to submit issues and pull requests to help improve the library.
