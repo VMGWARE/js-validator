@@ -9,7 +9,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup --cjsInterop",
+    "build": "tsup --cjsInterop && npx fix-tsup-cjs",
     "test": "jest",
     "pushversion": "tag=$(git tag --points-at HEAD) && git push origin $tag",
     "lint": "eslint",
@@ -36,5 +36,8 @@
     "ts-node": "^10.9.1",
     "tsup": "^8.0.1",
     "typescript": "^5.3.2"
+  },
+  "dependencies": {
+    "fix-tsup-cjs": "^1.2.0"
   }
 }
