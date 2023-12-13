@@ -98,7 +98,7 @@ jobs:
   triggers:
   - !BranchUpdateTrigger
     branches: main
-    projects: js-validator
+    projects: vmgware/js-validator
   retryCondition: never
   maxRetries: 3
   retryDelay: 30
