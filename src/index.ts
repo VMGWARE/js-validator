@@ -150,15 +150,11 @@ class Validator {
 
   /**
    * Creates an instance of the Validator class.
-   * @param {{ [key: string]: Rule }} rules - The validation rules for each field.
-   * @param {{ [key: string]: Message }} messages - The error messages for each rule.
+   * @param {Rules} rules - The validation rules for each field.
+   * @param {Messages} messages - The error messages for each rule.
    * @param {Options} [options] - Additional options for validation.
    */
-  constructor(
-    rules: { [key: string]: Rule },
-    messages: { [key: string]: Message },
-    options?: Options
-  ) {
+  constructor(rules: Rules, messages: Messages, options?: Options) {
     this.rules = rules;
     this.messages = messages;
     this.options = options || {};
