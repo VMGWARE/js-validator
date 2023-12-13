@@ -2,12 +2,13 @@
 
 name: Test & Build
 
+# any tag or branch name
 on:
   push:
-    branches: [main]
+    branches: ["*"]
     tags: ["*"]
   pull_request:
-    branches: [main]
+    branches: ["*"]
 
 jobs:
   test-and-build:
