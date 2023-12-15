@@ -1,6 +1,6 @@
-# .github/workflows/test-and-build.yml
+# .github/workflows/test.yml
 
-name: Test & Build
+name: Test
 
 # any tag or branch name
 on:
@@ -11,7 +11,7 @@ on:
     branches: ["*"]
 
 jobs:
-  test-and-build:
+  test:
     runs-on: ubuntu-latest
     container: node:18
 
