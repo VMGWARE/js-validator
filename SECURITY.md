@@ -17,7 +17,7 @@ The safety and security of JS Validator is a top priority. If you believe you ha
 
 2. **Email Your Report**: Send an email to the security team at `security@vmgware.dev`. Include a detailed report of the vulnerability, including the affected version, potential impact, and any steps to reproduce it. If possible, provide suggestions for how the vulnerability can be mitigated or fixed.
 
-3. **Wait for Response**: Our security team will review your report and respond as quickly as possible. We appreciate your patience as we work to confirm and address the vulnerability.
+3. **Wait for Response**: We will review your report and respond as quickly as possible. We appreciate your patience as we work to confirm and address the vulnerability.
 
 4. **Disclosure Timing**: Please allow us a reasonable amount of time to fix the issue before any public disclosure. We aim to handle all security reports with the utmost urgency and care.
 
