@@ -225,8 +225,11 @@ class Validator {
     this.errors = {};
     let isValid = true;
 
+    // Cache the keys of the rules for optimization
+    const ruleKeys = Object.keys(this.rules);
+
     // Iterate over the rules instead of input
-    for (const key in this.rules) {
+    for (const key of ruleKeys) {
       const rule = this.rules[key];
       const value = input[key];
 
