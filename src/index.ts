@@ -448,4 +448,3 @@ export type {
 
 // Export class
 export default Validator;
-// module.exports = Validator;
