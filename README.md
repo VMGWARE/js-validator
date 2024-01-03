@@ -1,5 +1,7 @@
 # JS Validator: Comprehensive Guide
 
+[![Quality Gate Status](https://sonar.vmgware.dev/api/project_badges/measure?project=VMGWARE_js-validator_AYzNAnwTPR--spDn0sJy&metric=alert_status&token=sqb_14de9039b8c9f81b8e94e43da4a0d4f64dac90c6)](https://sonar.vmgware.dev/dashboard?id=VMGWARE_js-validator_AYzNAnwTPR--spDn0sJy)
+
 JS Validator is a comprehensive JavaScript validation library designed to ensure the accuracy and integrity of data inputs in various applications. It offers a flexible and powerful approach to data validation, making it suitable for everything from simple form validations to complex business logic.
 
 ## Key Features
