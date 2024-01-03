@@ -306,6 +306,25 @@ describe("Validator - Regex Validation", () => {
   });
 });
 
+describe("Validator - Skip Validation", () => {
+  it("should skip validation for fields if skip is true", () => {
+    const validator = new Validator(
+      {
+        name: { type: "string", required: true, skip: () => true },
+      },
+      {
+        name: {
+          type: "Name must be a string",
+          required: "Name is required",
+        },
+      }
+    );
+
+    expect(validator.validate({ name: "John Doe" })).resolves.toBe(true);
+    expect(validator.validate({})).resolves.toBe(true);
+  });
+});
+
 describe("Validator - Options", () => {
   it("Should track the passed fields", () => {
     const validator = new Validator(
