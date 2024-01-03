@@ -157,7 +157,7 @@ class Validator {
   constructor(rules: Rules, messages: Messages, options?: Options) {
     this.rules = rules;
     this.messages = messages;
-    this.options = options || {};
+    this.options = options ?? {};
     this.errors = {};
     this.passed = {};
   }
@@ -241,7 +241,7 @@ class Validator {
       // Check for required field
       if (rule.required && (value === "" || value === undefined)) {
         this.errors[key] =
-          this.messages[key].required ||
+          this.messages[key].required ??
           `"${key}" is a required field and cannot be empty.`;
         isValid = false;
         continue; // Skip further checks if the field is missing
@@ -253,42 +253,42 @@ class Validator {
       // Type-specific validations
       if (rule.type === "string" && typeof value !== "string") {
         this.errors[key] =
-          this.messages[key].type ||
+          this.messages[key].type ??
           `Expected a ${rule.type}, but received ${typeof value}`;
         isValid = false;
       }
 
       if (rule.type === "number" && typeof value !== "number") {
         this.errors[key] =
-          this.messages[key].type ||
+          this.messages[key].type ??
           `Expected a ${rule.type}, but received ${typeof value}`;
         isValid = false;
       }
 
       if (rule.type === "boolean" && typeof value !== "boolean") {
         this.errors[key] =
-          this.messages[key].type ||
+          this.messages[key].type ??
           `Expected a ${rule.type}, but received ${typeof value}`;
         isValid = false;
       }
 
       if (rule.type === "integer" && !Validator.isInteger(value)) {
         this.errors[key] =
-          this.messages[key].type ||
+          this.messages[key].type ??
           `Expected a ${rule.type}, but received ${typeof value}`;
         isValid = false;
       }
 
       if (rule.type === "float" && !Validator.isFloat(value)) {
         this.errors[key] =
-          this.messages[key].type ||
+          this.messages[key].type ??
           `Expected a ${rule.type}, but received ${typeof value}`;
         isValid = false;
       }
 
       if (rule.type === "date" && !Validator.isDate(value)) {
         this.errors[key] =
-          this.messages[key].type ||
+          this.messages[key].type ??
           `Expected a ${rule.type}, but received ${typeof value}`;
         isValid = false;
       }
@@ -298,14 +298,14 @@ class Validator {
         // If the value is a string, check the length
         if (typeof value === "string" && value.length < rule.min) {
           this.errors[key] =
-            this.messages[key].min ||
+            this.messages[key].min ??
             `"${key}" should be at least ${rule.min} characters long (or greater if a number).`;
           isValid = false;
         }
         // If the value is a number, check the value
         if (typeof value === "number" && value < rule.min) {
           this.errors[key] =
-            this.messages[key].min ||
+            this.messages[key].min ??
             `"${key}" should be at least ${rule.min} characters long (or greater if a number).`;
           isValid = false;
         }
@@ -316,14 +316,14 @@ class Validator {
         // If the value is a string, check the length
         if (typeof value === "string" && value.length > rule.max) {
           this.errors[key] =
-            this.messages[key].max ||
+            this.messages[key].max ??
             `"${key}" should not exceed ${rule.max} characters (or be less if a number).`;
           isValid = false;
         }
         // If the value is a number, check the value
         if (typeof value === "number" && value > rule.max) {
           this.errors[key] =
-            this.messages[key].max ||
+            this.messages[key].max ??
             `"${key}" should not exceed ${rule.max} characters (or be less if a number).`;
           isValid = false;
         }
@@ -332,7 +332,7 @@ class Validator {
       // Check for valid email
       if (rule.validate === "email" && !Validator.isEmail(value)) {
         this.errors[key] =
-          this.messages[key].validate ||
+          this.messages[key].validate ??
           `"${key}" is not a valid email address. Please enter a valid email.`;
         isValid = false;
       }
@@ -340,7 +340,7 @@ class Validator {
       // Check for matching fields
       if (rule.match && value !== input[rule.match]) {
         this.errors[key] =
-          this.messages[key].match ||
+          this.messages[key].match ??
           `"${key}" must match with the "${rule.match}" field.`;
         isValid = false;
       }
@@ -348,7 +348,7 @@ class Validator {
       // Check for regex
       if (rule.regex && !Validator.isValidRegex(value, rule.regex)) {
         this.errors[key] =
-          this.messages[key].regex ||
+          this.messages[key].regex ??
           `"${key}" does not match the required format.`;
         isValid = false;
       }
@@ -358,7 +358,7 @@ class Validator {
         const customValid = await rule.custom(value);
         if (!customValid) {
           this.errors[key] =
-            this.messages[key].custom ||
+            this.messages[key].custom ??
             `Custom validation for "${key}" failed. Ensure it meets the specific requirements.`;
           isValid = false;
         }
