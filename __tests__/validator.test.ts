@@ -500,3 +500,59 @@ describe("Validator - Functions", () => {
     expect(validator.getPassedFields()).toEqual({});
   });
 });
+
+describe("Validator - Specific Types", () => {
+  it("should throw when given a number instead of a string", () => {
+    const validator = new Validator(
+      { name: { type: "string" } },
+      { name: { type: "Expected a string" } }
+    );
+    expect(validator.validate({ name: 1234 })).resolves.toBe(false);
+    expect(validator.getErrors().name).toBe("Expected a string");
+  });
+
+  it("should throw when given a string instead of a number", () => {
+    const validator = new Validator(
+      { age: { type: "number" } },
+      { age: { type: "Expected a number" } }
+    );
+    expect(validator.validate({ age: "twenty" })).resolves.toBe(false);
+    expect(validator.getErrors().age).toBe("Expected a number");
+  });
+
+  it("should throw when given a number instead of a boolean", () => {
+    const validator = new Validator(
+      { active: { type: "boolean" } },
+      { active: { type: "Expected a boolean" } }
+    );
+    expect(validator.validate({ active: 1 })).resolves.toBe(false);
+    expect(validator.getErrors().active).toBe("Expected a boolean");
+  });
+
+  it("should throw when given a float instead of an integer", () => {
+    const validator = new Validator(
+      { count: { type: "integer" } },
+      { count: { type: "Expected an integer" } }
+    );
+    expect(validator.validate({ count: 1.5 })).resolves.toBe(false);
+    expect(validator.getErrors().count).toBe("Expected an integer");
+  });
+
+  it("should throw when given an integer instead of a float", () => {
+    const validator = new Validator(
+      { score: { type: "float" } },
+      { score: { type: "Expected a float" } }
+    );
+    expect(validator.validate({ score: 10 })).resolves.toBe(false);
+    expect(validator.getErrors().score).toBe("Expected a float");
+  });
+
+  it("should throw when given a string instead of a date", () => {
+    const validator = new Validator(
+      { date: { type: "date" } },
+      { date: { type: "Expected a date" } }
+    );
+    expect(validator.validate({ date: "not a date" })).resolves.toBe(false);
+    expect(validator.getErrors().date).toBe("Expected a date");
+  });
+});
