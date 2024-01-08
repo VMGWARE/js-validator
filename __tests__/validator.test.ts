@@ -556,3 +556,45 @@ describe("Validator - Specific Types", () => {
     expect(validator.getErrors().date).toBe("Expected a date");
   });
 });
+
+describe("Validator - Enum", () => {
+  it("should throw when given a value not in the enum", () => {
+    const validator = new Validator(
+      { status: { enum: ["active", "inactive"] } },
+      { status: { enum: "Expected a value in the enum" } }
+    );
+    expect(validator.validate({ status: "deleted" })).resolves.toBe(false);
+    expect(validator.getErrors().status).toBe("Expected a value in the enum");
+  });
+
+  it("should not throw when given a value in the enum", () => {
+    const validator = new Validator(
+      { status: { enum: ["active", "inactive"] } },
+      { status: { enum: "Expected a value in the enum" } }
+    );
+    expect(validator.validate({ status: "active" })).resolves.toBe(true);
+    expect(validator.getErrors().status).toBeUndefined();
+  });
+});
+
+describe("Validator - Input", () => {
+  it("should throw when given a non-object", () => {
+    const validator = new Validator(
+      { name: { type: "string" } },
+      { name: { type: "Expected a string" } }
+    );
+    expect(validator.validate("John Doe")).rejects.toThrow(
+      "Input must be an object"
+    );
+  });
+
+  it("should throw when given a array", () => {
+    const validator = new Validator(
+      { name: { type: "string" } },
+      { name: { type: "Expected a string" } }
+    );
+    expect(validator.validate(["John Doe"])).rejects.toThrow(
+      "Input must be an object"
+    );
+  });
+});

@@ -38,6 +38,10 @@ interface Rule {
    * Regular expression to validate the field.
    */
   regex?: RegExp;
+  /**
+   * Enumeration of valid values.
+   */
+  enum?: Array<string | number | boolean>;
 }
 
 /**
@@ -76,6 +80,10 @@ interface Message {
    * The error message for regex validation failure.
    */
   regex?: string;
+  /**
+   * The error message for invalid enum value.
+   */
+  enum?: string;
 }
 
 /**
@@ -362,6 +370,16 @@ class Validator {
             `Custom validation for "${key}" failed. Ensure it meets the specific requirements.`;
           isValid = false;
         }
+      }
+
+      // Enumeration validation
+      if (rule.enum && !rule.enum.includes(value)) {
+        this.errors[key] =
+          this.messages[key].enum ??
+          `"${key}" must be one of the following values: ${rule.enum.join(
+            ", "
+          )}.`;
+        isValid = false;
       }
     }
 
