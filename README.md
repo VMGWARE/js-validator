@@ -2,219 +2,181 @@
 
 [![Quality Gate Status](https://sonar.vmgware.dev/api/project_badges/measure?project=VMGWARE_js-validator_AYzNAnwTPR--spDn0sJy&metric=alert_status&token=sqb_14de9039b8c9f81b8e94e43da4a0d4f64dac90c6)](https://sonar.vmgware.dev/dashboard?id=VMGWARE_js-validator_AYzNAnwTPR--spDn0sJy)
 
-JS Validator is a comprehensive JavaScript validation library designed to ensure the accuracy and integrity of data inputs in various applications. It offers a flexible and powerful approach to data validation, making it suitable for everything from simple form validations to complex business logic.
+JS Validator is a robust JavaScript library designed for validating data inputs across applications. It offers a versatile and effective approach to ensuring data integrity, making it suitable for various scenarios, from form validation to complex rule-based data checks.
 
 ## Key Features
 
-- **Versatile Data Type Support**: Validates strings, numbers, booleans, integers, floats, and dates.
-- **Extensive Validation Rules**: Includes rules for minimum/maximum values, regex patterns, custom functions, and more.
-- **Asynchronous Validation**: Supports async functions, ideal for validations that require database checks or API calls.
-- **Customizable Error Messages**: Define specific messages for different validation failures.
-- **Strict Mode Option**: Enforces validation against all input fields, flagging any that aren't explicitly defined in the rules.
-- **Error and Success Tracking**: Methods to retrieve fields that failed or passed validation.
-- **Documentation**: Comprehensive documentation for ease of use.
-- **TypeScript Support**: Provides type safety for TypeScript applications.
-  - Should be noted that it is still in development. So issues may arise.
-- **Lightweight**: Small library size with no external dependencies.
-- **Open Source**: MIT License allows for wide usage and modification.
+- **Support for Various Data Types**: Validates strings, numbers, booleans, integers, floats, and dates, catering to a wide range of data validation needs.
+- **Comprehensive Validation Rules**: Equipped with a rich set of rules for checking minimum/maximum values or lengths, matching patterns through regex, and more, ensuring thorough data validation.
+- **Asynchronous Validation Capabilities**: Facilitates async validations, perfect for use cases requiring database queries or API calls for validation.
+- **Customizable Error Messaging**: Allows for the definition of custom error messages for different validation scenarios, enhancing clarity and user experience.
+- **Strict Mode for Rigorous Validation**: Offers an option to enable strict mode, ensuring that only fields defined in the validation rules are accepted, enhancing security and data integrity.
+- **Tracking of Validation Outcomes**: Provides methods to easily retrieve fields that either passed or failed the validation, aiding in response handling and user feedback.
+- **Comprehensive Documentation**: Includes detailed documentation for easy integration and use.
+- **TypeScript Compatibility**: Offers type definitions for seamless integration in TypeScript projects, enhancing code quality and maintainability.
+- **Minimalistic Design**: Lightweight with no dependencies, ensuring quick load times and efficient performance.
+- **Open Source and Community-Driven**: Licensed under MIT, encouraging community contributions and widespread use.
 
 ## Installation
 
-To start using JS Validator, install it via npm:
+You can easily integrate JS Validator into your project by installing it through npm:
 
 ```bash
 npm install @vmgware/js-validator
 ```
 
-## Detailed Usage Examples
+## Usage Examples
 
-### JavaScript Example: Form Validation
+### Validating a User Registration Form in JavaScript
 
-Here's a basic example to validate a user registration form:
+This example demonstrates how to validate a simple user registration form:
 
 ```javascript
 const Validator = require("@vmgware/js-validator");
 
-// Define validation rules
+// Define validation rules for user data
 const rules = {
   username: { type: "string", required: true, min: 3 },
   email: { type: "string", required: true, validate: "email" },
   age: { type: "number", min: 18 },
 };
 
-// Custom error messages for each rule
+// Define custom error messages for validation failures
 const messages = {
   username: {
-    type: "Username must be a string",
     required: "Username is required",
-    min: "Username must be at least 3 characters",
+    min: "Username must be at least 3 characters long",
   },
   email: {
-    type: "Email must be a string",
     required: "Email is required",
-    validate: "Invalid email format",
+    validate: "Please enter a valid email address",
   },
-  age: { type: "Age must be a number", min: "Age must be at least 18" },
+  age: {
+    min: "You must be at least 18 years old",
+  },
 };
 
-// Initialize the validator
+// Initialize the validator with the defined rules and messages
 const validator = new Validator(rules, messages);
 
-// Sample data to validate
-const userData = { username: "johndoe", email: "john@example.com", age: 20 };
+// Sample user data to be validated
+const userData = {
+  username: "johndoe",
+  email: "john.doe@example.com",
+  age: 25,
+};
 
-// Perform validation
-validator.validate(userData).then((isValid) => {
+// Validate the user data
+validator.validate(userData).then(isValid => {
   if (isValid) {
-    console.log("Registration valid");
+    console.log("User data is valid");
   } else {
-    console.log("Validation errors:", validator.getErrors());
+    console.error("Validation errors:", validator.getErrors());
   }
 });
 ```
 
 ### TypeScript Example: Validating a User Profile
 
-In this example, we'll validate a user profile form using TypeScript. TypeScript allows us to define interfaces for our data, making the code more robust and easier to understand.
-
-First, define an interface for the user data:
+In this TypeScript example, we validate a user profile form, leveraging TypeScript's type safety:
 
 ```typescript
+import Validator from "@vmgware/js-validator";
+
 interface UserProfile {
   username: string;
   email: string;
   birthdate: Date;
 }
-```
 
-Now, let's use JS Validator to validate this data:
-
-```typescript
-import Validator from "@vmgware/js-validator";
-
-// Define validation rules according to the UserProfile interface
+// Validation rules according to the UserProfile interface
 const rules = {
   username: { type: "string", required: true, min: 3 },
   email: { type: "string", required: true, validate: "email" },
   birthdate: { type: "date", required: true },
 };
 
-// Custom error messages
+// Custom error messages for validation failures
 const messages = {
   username: {
-    type: "Username must be a string",
     required: "Username is required",
-    min: "Username must be at least 3 characters",
+    min: "Username must be at least 3 characters long",
   },
   email: {
-    type: "Email must be a string",
     required: "Email is required",
-    validate: "Invalid email format",
+    validate: "Please enter a valid email address",
   },
   birthdate: {
-    type: "Birthdate must be a date",
     required: "Birthdate is required",
   },
 };
 
-// Initialize the validator
+// Initialize the validator with rules and messages tailored for UserProfile
 const validator = new Validator<UserProfile>(rules, messages);
 
-// Sample user data to validate
+// Sample user profile data to be validated
 const userProfile: UserProfile = {
   username: "janedoe",
-  email: "jane@example.com",
-  birthdate: new Date("1990-01-01"),
+  email: "jane.doe@example.com",
+  birthdate: new Date("1990-04-15"),
 };
 
-// Perform validation
-validator.validate(userProfile).then((isValid) => {
+// Validate the user profile
+validator.validate(userProfile).then(isValid => {
   if (isValid) {
     console.log("User profile is valid");
   } else {
-    console.log("Validation errors:", validator.getErrors());
+    console.error("Validation errors:", validator.getErrors());
   }
 });
 ```
 
-In this TypeScript example:
+## Why Custom Error Messages?
 
-- We define an interface `UserProfile` to enforce the structure of user data.
-- The validation rules and messages are set up in a similar way as in JavaScript.
-- The `Validator` is initialized with the type parameter `UserProfile` to ensure type safety.
-- The `validate` method is used to check if the user data conforms to the specified rules.
+Custom error messages provide clear, user-friendly feedback, helping users correct their inputs effectively.
 
-### Why Use Custom Error Messages?
+## Asynchronous Validation Example
 
-Custom error messages enhance the user experience by providing clear, context-specific feedback. This is crucial in form validations where users need to understand what went wrong and how to correct it.
-
-### Asynchronous Validation: Checking Username Availability
-
-Asynchronous validation is useful for scenarios that require external data checks, such as verifying if a username is already taken:
+Asynchronous validation is particularly useful for checks that require external data, such as verifying if a username is available:
 
 ```javascript
-// Asynchronous function to check username availability
+// Asynchronous function to check if a username is available
 async function isUsernameAvailable(username) {
-  // Example: Call to a database or external API
-  // Returns true if the username is available
+  // Simulate an API call to check username availability
+  // Returns true if available
 }
 
-// Adding async validation to rules
-rules.username.custom = async (username) => {
-  return await isUsernameAvailable(username);
-};
+// Add asynchronous custom validation to the username field
+rules.username.custom = async username => await isUsernameAvailable(username);
 
-messages.username.custom = "Username is already taken";
+// Define a custom error message for the username availability check
+messages.username.custom = "This username is already taken";
 
-// Usage remains the same as before
+// Validation process remains the same as shown in previous examples
 ```
 
-### Strict Mode: Ensuring Comprehensive Validation
+## Using Strict Mode for Enhanced Validation
 
-Strict mode is useful in API endpoints or data processing scripts where you need to validate incoming data against all defined rules and reject any additional, undefined fields. This helps prevent unexpected data from being processed or stored.
+Strict mode ensures that the input strictly adheres to the defined rules, rejecting any extraneous fields:
 
 ```javascript
-// Enable strict mode in options
+// Enable strict mode in the validator options
 const options = { strictMode: true };
 
-// Initialize the validator with options
+// Initialize the validator with rules, messages, and options
 const validator = new Validator(rules, messages, options);
 
-// If the input contains fields not defined in the rules, those will be flagged as errors
+// With strict mode, any fields not defined in the rules will result in a validation error
 ```
-
-## API Reference
-
-### Constructor: `Validator(rules, messages, [options])`
-
-- `rules`: Defines validation rules.
-- `messages`: Corresponding error messages.
-- `options`: Additional configuration like enabling strict mode.
-
-### Methods
-
-- `validate(input)`: Validates the input data.
-- `getErrors()`: Retrieves current validation errors.
-- `getPassedFields()`: Gets fields that passed validation.
-- `reset()`: Resets the validator's state.
-- `updateRules(rules)`: Updates the validation rules.
-- `updateMessages(messages)`: Updates the error messages.
-- `updateOptions(options)`: Updates the validator's options.
 
 ## Contributing
 
-We welcome contributions to this library. Feel free to submit issues and pull requests to help improve the library.
-
-For those writing commits, please follow the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification. This helps us maintain a consistent commit history and generate changelogs automatically.
-
-Also, when making changes, only push to the `develop` branch. The `main` branch is reserved for stable releases as semantic-release will automatically publish to npm from there. The `develop` branch is used for development and testing, PR's will be squashed and merged into `develop` and then when ready, `develop` will be merged into `main`.
+Contributions are welcome! Please follow the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) standard for commit messages.
 
 ## License
 
-This library is open-sourced under the MIT License, allowing for wide usage and modification. See the [LICENSE](LICENSE) file for details. Feel free to submit issues and pull requests to help improve the library.
+JS Validator is open-sourced under the MIT License. See the [LICENSE](LICENSE) file for more details.
 
-## Who should use this library?
+## Who Should Use JS Validator?
 
-This library is ideal for developers who want a simple, yet powerful validation library for their JavaScript or TypeScript applications. It's suitable for a wide range of use cases, from simple form validations to complex business logic.
-
-Now that the random text is over, I would like to say that this library is for anyone who wants to use it. I made it for projects of VMG Ware as a central validation library. But I thought it would be nice to share it with the world. So here it is. I hope you enjoy it.
+JS Validator is designed for developers seeking a straightforward yet versatile validation library for their JavaScript or TypeScript projects. Whether you're validating simple forms or complex data structures, JS Validator provides the tools you need to ensure data integrity with minimal effort.
