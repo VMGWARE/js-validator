@@ -127,6 +127,63 @@ describe("Validator - Required Validation", () => {
   });
 });
 
+describe("Validator - Required When Validation", () => {
+  it("should validate requiredWhen fields", () => {
+    const validator = new Validator(
+      {
+        name: { type: "string", requiredWhen: { field: "age", value: 18 } },
+        age: { type: "number" },
+      },
+      {
+        name: {
+          type: "Name must be a string",
+          requiredWhen: "Name is required",
+        },
+        age: {
+          type: "Age must be a number",
+        },
+      }
+    );
+
+    expect(validator.validate({ name: "John Doe", age: 18 })).resolves.toBe(
+      true
+    );
+    expect(validator.validate({ age: 18 })).resolves.toBe(false);
+  });
+
+  it("should validate requiredWhen fields with multiple values", () => {
+    const validator = new Validator(
+      {
+        name: {
+          type: "string",
+          requiredWhen: {
+            field: "age",
+            value: [18, 20],
+          },
+        },
+        age: { type: "number" },
+      },
+      {
+        name: {
+          type: "Name must be a string",
+          requiredWhen: "Name is required",
+        },
+        age: {
+          type: "Age must be a number",
+        },
+      }
+    );
+
+    expect(validator.validate({ name: "John Doe", age: 18 })).resolves.toBe(
+      true
+    );
+    expect(validator.validate({ name: "John Doe", age: 20 })).resolves.toBe(
+      true
+    );
+    expect(validator.validate({ age: 18 })).resolves.toBe(false);
+  });
+});
+
 describe("Validator - Min/Max Validation", () => {
   it("should validate number fields against a minimum value", () => {
     const validator = new Validator(

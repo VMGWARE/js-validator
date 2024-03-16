@@ -42,6 +42,10 @@ interface Rule {
    * Enumeration of valid values.
    */
   enum?: Array<string | number | boolean>;
+  /**
+   * Field is required when another field matches a specific value.
+   */
+  requiredWhen?: { field: string; value: any | any[] };
 }
 
 /**
@@ -84,6 +88,10 @@ interface Message {
    * The error message for invalid enum value.
    */
   enum?: string;
+  /**
+   * The error message for requiredWhen validation failure.
+   */
+  requiredWhen?: string;
 }
 
 /**
@@ -253,6 +261,34 @@ class Validator {
           `"${key}" is a required field and cannot be empty.`;
         isValid = false;
         continue; // Skip further checks if the field is missing
+      }
+
+      // Handle requiredWhen condition
+      if (rule.requiredWhen) {
+        const conditionField = rule.requiredWhen.field;
+        const conditionValue = rule.requiredWhen.value;
+        let conditionMet = false;
+
+        // Check if conditionValue is an array and if it includes the input value
+        if (Array.isArray(conditionValue)) {
+          conditionMet = conditionValue.includes(input[conditionField]);
+        } else {
+          // If conditionValue is not an array, proceed with the normal equality check
+          conditionMet = input[conditionField] === conditionValue;
+        }
+
+        // If the condition is met and the field is required but not present or empty
+        if (conditionMet && (value === "" || value === undefined)) {
+          this.errors[key] =
+            this.messages[key].required ??
+            `"${key}" is required when "${conditionField}" is set to ${
+              Array.isArray(conditionValue)
+                ? conditionValue.join(" or ")
+                : conditionValue
+            }.`;
+          isValid = false;
+          continue; // Skip further checks for this field
+        }
       }
 
       // If the value is not present, no need to check further rules
