@@ -182,6 +182,74 @@ describe("Validator - Required When Validation", () => {
     );
     expect(validator.validate({ age: 18 })).resolves.toBe(false);
   });
+
+  it("should validate requiredWhen fields with multiple fields", () => {
+    const validator = new Validator(
+      {
+        name: {
+          type: "string",
+          requiredWhen: [
+            { field: "age", value: 18 },
+            { field: "age", value: 20 },
+          ],
+        },
+        age: { type: "number" },
+      },
+      {
+        name: {
+          type: "Name must be a string",
+          requiredWhen: "Name is required",
+        },
+        age: {
+          type: "Age must be a number",
+        },
+      }
+    );
+
+    expect(validator.validate({ name: "John Doe", age: 18 })).resolves.toBe(
+      true
+    );
+    expect(validator.validate({ name: "John Doe", age: 20 })).resolves.toBe(
+      true
+    );
+    expect(validator.validate({ age: 18 })).resolves.toBe(false);
+  });
+
+  it("should validate requiredWhen fields with multiple fields and values", () => {
+    const validator = new Validator(
+      {
+        name: {
+          type: "string",
+          requiredWhen: [
+            { field: "age", value: [18, 20] },
+            { field: "active", value: true },
+          ],
+        },
+        age: { type: "number" },
+        active: { type: "boolean" },
+      },
+      {
+        name: {
+          type: "Name must be a string",
+          requiredWhen: "Name is required",
+        },
+        age: {
+          type: "Age must be a number",
+        },
+        active: {
+          type: "Active must be a boolean",
+        },
+      }
+    );
+
+    expect(
+      validator.validate({ name: "John Doe", age: 18, active: true })
+    ).resolves.toBe(true);
+    expect(
+      validator.validate({ name: "John Doe", age: 20, active: true })
+    ).resolves.toBe(true);
+    expect(validator.validate({ age: 18, active: true })).resolves.toBe(false);
+  });
 });
 
 describe("Validator - Min/Max Validation", () => {

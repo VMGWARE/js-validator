@@ -45,7 +45,9 @@ interface Rule {
   /**
    * Field is required when another field matches a specific value.
    */
-  requiredWhen?: { field: string; value: any | any[] };
+  requiredWhen?:
+    | { field: string; value: any | any[] }
+    | Array<{ field: string; value: any | any[] }>;
 }
 
 /**
@@ -265,27 +267,33 @@ class Validator {
 
       // Handle requiredWhen condition
       if (rule.requiredWhen) {
-        const conditionField = rule.requiredWhen.field;
-        const conditionValue = rule.requiredWhen.value;
         let conditionMet = false;
 
-        // Check if conditionValue is an array and if it includes the input value
-        if (Array.isArray(conditionValue)) {
-          conditionMet = conditionValue.includes(input[conditionField]);
-        } else {
-          // If conditionValue is not an array, proceed with the normal equality check
-          conditionMet = input[conditionField] === conditionValue;
+        // Convert single condition to array for unified processing
+        const conditions = Array.isArray(rule.requiredWhen)
+          ? rule.requiredWhen
+          : [rule.requiredWhen];
+
+        for (const condition of conditions) {
+          const conditionField = condition.field;
+          const conditionValue = condition.value;
+          const inputValue = input[conditionField];
+
+          // Check if the condition is met (supports value being an array)
+          if (Array.isArray(conditionValue)) {
+            conditionMet = conditionValue.includes(inputValue);
+          } else {
+            conditionMet = inputValue === conditionValue;
+          }
+
+          if (conditionMet) break; // Stop checking further conditions if one is met
         }
 
-        // If the condition is met and the field is required but not present or empty
+        // If any condition is met and the field is required but not present or empty
         if (conditionMet && (value === "" || value === undefined)) {
           this.errors[key] =
-            this.messages[key].required ??
-            `"${key}" is required when "${conditionField}" is set to ${
-              Array.isArray(conditionValue)
-                ? conditionValue.join(" or ")
-                : conditionValue
-            }.`;
+            this.messages[key].requiredWhen ??
+            `"${key}" is required based on the current conditions.`;
           isValid = false;
           continue; // Skip further checks for this field
         }
