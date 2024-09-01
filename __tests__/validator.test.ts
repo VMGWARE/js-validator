@@ -127,6 +127,35 @@ describe("Validator - Required Validation", () => {
   });
 });
 
+describe("Validator - String Trimming Before Validation", () => {
+
+  it("should not accept input with only spaces", () => {
+    const validator = new Validator(
+      { name: { type: "string", required: true } },
+      {
+        name: {
+          type: "Name must be a string",
+          required: "Name is required",
+        },
+      }
+    );
+    expect(validator.validate({ name: "  " })).resolves.toBe(false);
+  });
+
+  it("should trim input before validation", () => {
+    const validator = new Validator(
+      { name: { type: "string", required: true } },
+      {
+        name: {
+          type: "Name must be a string",
+          required: "Name is required",
+        },
+      }
+    );
+    expect(validator.validate({ name: "  John Doe  " })).resolves.toBe(true);
+  });
+});
+
 describe("Validator - Required When Validation", () => {
   it("should validate requiredWhen fields", () => {
     const validator = new Validator(

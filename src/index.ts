@@ -128,6 +128,10 @@ interface Options {
    * Flag to enable strict mode. If true, fields not defined in rules will be flagged as errors.
    */
   strictMode?: boolean;
+  /**
+    * Flag to enable trimming of string values before validation.
+    */
+  trimStrings?: boolean;
 }
 
 /**
@@ -175,7 +179,11 @@ class Validator {
   constructor(rules: Rules, messages: Messages, options?: Options) {
     this.rules = rules;
     this.messages = messages;
-    this.options = options ?? {};
+    this.options = options ?? {
+      trackPassedFields: false,
+      strictMode: false,
+      trimStrings: true,
+    };
     this.errors = {};
     this.passed = {};
   }
@@ -249,11 +257,17 @@ class Validator {
     // Iterate over the rules instead of input
     for (const key of ruleKeys) {
       const rule = this.rules[key];
-      const value = input[key];
+      let  value = input[key];
 
       // Skipping validation under certain conditions
       if (rule.skip && typeof rule.skip === "function" && rule.skip(input)) {
         continue; // Skip further validation if the condition is met
+      }
+
+      // Trim the value if it is a string
+      if (typeof value === "string" && this.options.trimStrings) {
+        input[key] = value.trim();
+        value = input[key];
       }
 
       // Check for required field
